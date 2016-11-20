@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps", "SteuerSoft.Maps\SteuerSoft.Maps.csproj", "{DB332FD5-A677-48B4-AEDF-2FE6885B6858}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps.Core", "SteuerSoft.Maps.Core\SteuerSoft.Maps.Core.csproj", "{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps.MonoGame", "SteuerSoft.Maps.MonoGame\SteuerSoft.Maps.MonoGame.csproj", "{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF} = {55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}
+		{DB332FD5-A677-48B4-AEDF-2FE6885B6858} = {DB332FD5-A677-48B4-AEDF-2FE6885B6858}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB332FD5-A677-48B4-AEDF-2FE6885B6858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB332FD5-A677-48B4-AEDF-2FE6885B6858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB332FD5-A677-48B4-AEDF-2FE6885B6858}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB332FD5-A677-48B4-AEDF-2FE6885B6858}.Debug|x86.Build.0 = Debug|Any CPU
+		{DB332FD5-A677-48B4-AEDF-2FE6885B6858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB332FD5-A677-48B4-AEDF-2FE6885B6858}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB332FD5-A677-48B4-AEDF-2FE6885B6858}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB332FD5-A677-48B4-AEDF-2FE6885B6858}.Release|x86.Build.0 = Release|Any CPU
+		{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}.Debug|x86.Build.0 = Debug|Any CPU
+		{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}.Release|x86.ActiveCfg = Release|Any CPU
+		{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}.Release|x86.Build.0 = Release|Any CPU
+		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Debug|Any CPU.Build.0 = Debug|x86
+		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Debug|x86.ActiveCfg = Debug|x86
+		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Debug|x86.Build.0 = Debug|x86
+		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Release|Any CPU.ActiveCfg = Release|x86
+		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Release|x86.ActiveCfg = Release|x86
+		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
