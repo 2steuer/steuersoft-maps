@@ -46,7 +46,8 @@
     <Compile Include="Material\MapRectangle.cs" />
     <Compile Include="Material\MapSize.cs" />
     <Compile Include="Material\MapPointLatLon.cs" />
-    <Compile Include="Material\MapPoint.cs" />
+    <Compile Include="Material\MapVector.cs" />
+    <Compile Include="Material\MapVectorD.cs" />
     <Compile Include="Material\TileDescriptor.cs" />
     <Compile Include="Material\TileDrawInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

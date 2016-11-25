@@ -14,7 +14,7 @@ namespace SteuerSoft.Maps.Core.Material
       /// <summary>
       /// The Location of the rectangle.
       /// </summary>
-      public MapPoint Location;
+      public MapVector Location;
 
       /// <summary>
       /// The dimensions of the rectangle.
@@ -50,7 +50,7 @@ namespace SteuerSoft.Maps.Core.Material
       /// <param name="height">Height of the rectangle.</param>
       public MapRectangle(int x, int y, int width, int height)
       {
-         Location = new MapPoint();
+         Location = new MapVector();
          Size = new MapSize();
 
          X = x;

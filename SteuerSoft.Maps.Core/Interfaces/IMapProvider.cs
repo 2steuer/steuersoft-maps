@@ -68,7 +68,7 @@ namespace SteuerSoft.Maps.Core.Interfaces
       /// <param name="zoom">The zoom level hat which the tile coordinates shall be calculated.</param>
       /// <param name="point">The Point in Geo-Coordinates of whcih the tile shall be calculated.</param>
       /// <returns>The X/Y coordinates of the tile containing the given geo-coordinate.</returns>
-      MapPoint GetTileForPoint(int zoom, MapPointLatLon point);
+      MapVector GetTileForPoint(int zoom, MapPointLatLon point);
 
       /// <summary>
       /// Returns the Lat/Lon geo-coordinates for a tile
@@ -76,7 +76,7 @@ namespace SteuerSoft.Maps.Core.Interfaces
       /// <param name="zoom">The zoom level the tile is at</param>
       /// <param name="tile">The tile coordinates in X/Y</param>
       /// <returns>The Geo-Point the top-left corner of the tile is at.</returns>
-      MapPointLatLon GetPointForTile(int zoom, MapPoint tile);
+      MapPointLatLon GetPointForTile(int zoom, MapVector tile);
 
       /// <summary>
       /// Returns the number of tiles in each direction (x and y) on the given zoom level.
@@ -92,6 +92,6 @@ namespace SteuerSoft.Maps.Core.Interfaces
       /// <param name="zoom">The zoom level the tile is at.</param>
       /// <param name="tile">The X/Y of the tile at the given zoom level.</param>
       /// <returns>The URL to the given tile.</returns>
-      string GetTileUrl(int server, int zoom, MapPoint tile);
+      string GetTileUrl(int server, int zoom, MapVector tile);
    }
 }

@@ -39,7 +39,7 @@ namespace SteuerSoft.Maps.Providers
          _projection = MercatorProjection.GetInstance();  
       }
 
-      public string GetTileUrl(int server, int zoom, MapPoint tile)
+      public string GetTileUrl(int server, int zoom, MapVector tile)
       {
          return $"http://{(server < _servers.Length ? _servers[server] : _servers[0])}.tile.openstreetmap.org/{zoom}/{tile.X}/{tile.Y}.png";
       }
@@ -62,7 +62,7 @@ namespace SteuerSoft.Maps.Providers
       /// <param name="zoom">The zoom level hat which the tile coordinates shall be calculated.</param>
       /// <param name="point">The Point in Geo-Coordinates of whcih the tile shall be calculated.</param>
       /// <returns>The X/Y coordinates of the tile containing the given geo-coordinate.</returns>
-      public MapPoint GetTileForPoint(int zoom, MapPointLatLon point)
+      public MapVector GetTileForPoint(int zoom, MapPointLatLon point)
       {
          if (zoom < MinZoom || zoom > MaxZoom)
          {
@@ -79,7 +79,7 @@ namespace SteuerSoft.Maps.Providers
          int x = (int) Math.Floor(n*shiftedLon);
          int y = (int) Math.Floor(n*shiftedLat);
 
-         return new MapPoint() {X = x, Y = y};
+         return new MapVector() {X = x, Y = y};
       }
 
       /// <summary>
@@ -88,7 +88,7 @@ namespace SteuerSoft.Maps.Providers
       /// <param name="zoom">The zoom level the tile is at</param>
       /// <param name="tile">The tile coordinates in X/Y</param>
       /// <returns>The Geo-Point the top-left corner of the tile is at.</returns>
-      public MapPointLatLon GetPointForTile(int zoom, MapPoint tile)
+      public MapPointLatLon GetPointForTile(int zoom, MapVector tile)
       {
          double n = GetTileCount(zoom);
          if (tile.X > n || tile.Y > n)

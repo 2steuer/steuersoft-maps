@@ -202,7 +202,7 @@ namespace SteuerSoft.Maps
       /// <param name="zoom">The zoom level to get the tile from.</param>
       /// <param name="tile">The tile X/Y coordinates.</param>
       /// <returns>A stream to the tiles contents or null.</returns>
-      public Stream GetTile(int zoom, MapPoint tile)
+      public Stream GetTile(int zoom, MapVector tile)
       {
          TileDescriptor desc = new TileDescriptor(zoom, tile);
 
@@ -264,17 +264,17 @@ namespace SteuerSoft.Maps
       /// <summary>
       /// Transforms a Point from the MapCoordinates system to the GeoCoordinates system.
       /// </summary>
-      /// <param name="mapPoint">A Point within the MapCoordinates system.</param>
+      /// <param name="mapVector">A Point within the MapCoordinates system.</param>
       /// <returns>The corresponding point in the GeoCoordinates system.</returns>
-      public MapPointLatLon MapPointToLatLon(MapPoint mapPoint)
+      public MapPointLatLon MapPointToLatLon(MapVector mapVector)
       {
-         if (mapPoint.X > MapCoordinatesWidth || mapPoint.Y > MapCoordinatesHeight)
+         if (mapVector.X > MapCoordinatesWidth || mapVector.Y > MapCoordinatesHeight)
          {
-            throw new ArgumentException("Coordinates of the tile are out of map size.", nameof(mapPoint));
+            throw new ArgumentException("Coordinates of the tile are out of map size.", nameof(mapVector));
          }
 
-         double projectedlon = ((double)mapPoint.X / MapCoordinatesWidth) * 360 - 180;
-         double projectedlat = (-2 * ((double)mapPoint.Y / MapCoordinatesHeight) + 1) * 180;
+         double projectedlon = ((double)mapVector.X / MapCoordinatesWidth) * 360 - 180;
+         double projectedlat = (-2 * ((double)mapVector.Y / MapCoordinatesHeight) + 1) * 180;
 
          return Provider.Projection.FromProjection(new MapPointLatLon() { Lat = projectedlat, Lon = projectedlon });
       }
@@ -284,11 +284,11 @@ namespace SteuerSoft.Maps
       /// </summary>
       /// <param name="pt">A Point within the GeoCoordinates system.</param>
       /// <returns>The corresponding point within the MapCoordinates system.</returns>
-      public MapPoint LatLonToMapPoint(MapPointLatLon pt)
+      public MapVector LatLonToMapPoint(MapPointLatLon pt)
       {
          MapPointLatLon proj = Provider.Projection.ToProjection(pt);
 
-         MapPoint newP = new MapPoint();
+         MapVector newP = new MapVector();
 
          double shiftedLon = (1 + (proj.Lon / 180)) / 2;
          double shiftedLat = (1 - (proj.Lat / 180)) / 2;
@@ -308,34 +308,34 @@ namespace SteuerSoft.Maps
          List<TileDrawInfo> info = new List<TileDrawInfo>();
 
          // 1. Get center point MapCoordinates
-         MapPoint centerMapPoint = LatLonToMapPoint(Position);
+         MapVector centerMapVector = LatLonToMapPoint(Position);
 
          // 2. Calculate offset from center point to topleft point in map coordinates
          int topLeftXOffset = (int)((ViewBounds.Width / 2.0) / CoordinateScale);
          int topLeftYOffset = (int)((ViewBounds.Height / 2.0) / CoordinateScale);
 
          // 3. Calculate the top left point in map coordinates
-         MapPoint topLeftMapPoint = new MapPoint()
+         MapVector topLeftMapVector = new MapVector()
          {
             // real a mod b:
             // a mod b = (a % b + b) % b
             // https://de.wikipedia.org/wiki/Division_mit_Rest#Modulo
 
-            X = (((centerMapPoint.X - topLeftXOffset) % MapCoordinatesWidth) + MapCoordinatesWidth) % MapCoordinatesWidth,
-            Y = (((centerMapPoint.Y - topLeftYOffset) % MapCoordinatesHeight) + MapCoordinatesHeight) % MapCoordinatesHeight
+            X = (((centerMapVector.X - topLeftXOffset) % MapCoordinatesWidth) + MapCoordinatesWidth) % MapCoordinatesWidth,
+            Y = (((centerMapVector.Y - topLeftYOffset) % MapCoordinatesHeight) + MapCoordinatesHeight) % MapCoordinatesHeight
          };
 
          // 4. Calculate Tile X/Y directly from Map Coordiantes
-         MapPoint tileCoord = new MapPoint()
+         MapVector tileCoord = new MapVector()
          {
-            X = (int)Math.Floor(topLeftMapPoint.X / (Provider.TileSize / CoordinateScale)),
-            Y = (int)Math.Floor(topLeftMapPoint.Y / (Provider.TileSize / CoordinateScale))
+            X = (int)Math.Floor(topLeftMapVector.X / (Provider.TileSize / CoordinateScale)),
+            Y = (int)Math.Floor(topLeftMapVector.Y / (Provider.TileSize / CoordinateScale))
          };
 
          // 5. Calculate the Top-Left point of the top-left tile
-         //PointXY tileMapPoint = LatLonToMapPoint(Provider.GetPointForTile(Zoom, tileCoord));
+         //PointXY tileMapVector = LatLonToMapPoint(Provider.GetPointForTile(Zoom, tileCoord));
 
-         MapPoint tileMapPoint = new MapPoint()
+         MapVector tileMapVector = new MapVector()
          {
             X = (int)(tileCoord.X * (Provider.TileSize / CoordinateScale)),
             Y = (int)(tileCoord.Y * (Provider.TileSize / CoordinateScale))
@@ -343,7 +343,7 @@ namespace SteuerSoft.Maps
 
          // 6. Get the offset of the top-left-point of the top-left-tile to the top-left point of the map
          // So we know if it is outside of the viewable port.
-         MapPoint offset = (tileMapPoint - topLeftMapPoint) * CoordinateScale;
+         MapVector offset = (tileMapVector - topLeftMapVector) * CoordinateScale;
 
          // 7. Create a rectangle for the top-left tile
          MapRectangle imgRect = new MapRectangle(offset.X, offset.Y, Provider.TileSize, Provider.TileSize);

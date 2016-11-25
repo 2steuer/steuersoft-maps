@@ -22,7 +22,7 @@ namespace SteuerSoft.Maps.Core.Material
       /// <summary>
       /// The X/Y Coordinates of the tile within the specified zoom level.
       /// </summary>
-      public MapPoint Tile { get; set; }
+      public MapVector Tile { get; set; }
 
       /// <summary>
       /// Creates a new tile descriptor using raw coordinates.
@@ -31,7 +31,7 @@ namespace SteuerSoft.Maps.Core.Material
       /// <param name="x">X-Coordinate within the zoom level.</param>
       /// <param name="y">Y-Coordinate within the zoom level.</param>
       public TileDescriptor(int zoom, int x, int y)
-         :this(zoom, new MapPoint() { X = x, Y = y})
+         :this(zoom, new MapVector() { X = x, Y = y})
       {
          
       }
@@ -41,7 +41,7 @@ namespace SteuerSoft.Maps.Core.Material
       /// </summary>
       /// <param name="zoom">The zoom level.</param>
       /// <param name="tile">The Coordinates of the tile within the zoom level.</param>
-      public TileDescriptor(int zoom, MapPoint tile)
+      public TileDescriptor(int zoom, MapVector tile)
       {
          Zoom = zoom;
          Tile = tile;

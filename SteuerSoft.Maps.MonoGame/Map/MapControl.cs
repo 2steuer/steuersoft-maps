@@ -273,23 +273,23 @@ namespace SteuerSoft.Maps.MonoGame.Map
 
          if (_dragging)
          {
-            MapPoint oldPoint = new MapPoint() {X = _oldMouseState.X, Y = _oldMouseState.Y};
-            MapPoint newPoint = new MapPoint() {X = currentState.X, Y = currentState.Y};
+            MapVector oldVector = new MapVector() {X = _oldMouseState.X, Y = _oldMouseState.Y};
+            MapVector newVector = new MapVector() {X = currentState.X, Y = currentState.Y};
 
-            MapPoint offset = (oldPoint - newPoint) / _map.CoordinateScale;
+            MapVector offset = (oldVector - newVector) / _map.CoordinateScale;
 
-            MapPoint centerMapPoint = _map.LatLonToMapPoint(_map.Position);
-            MapPoint newCenterMapPoint = centerMapPoint + offset;
+            MapVector centerMapVector = _map.LatLonToMapPoint(_map.Position);
+            MapVector newCenterMapVector = centerMapVector + offset;
 
             // real a mod b:
             // a mod b = (a % b + b) % b
             // https://de.wikipedia.org/wiki/Division_mit_Rest#Modulo
             // We do this to allow scrollen over the maps borders.
-            newCenterMapPoint.X = ((newCenterMapPoint.X%_map.MapCoordinatesWidth) + _map.MapCoordinatesWidth) % _map.MapCoordinatesWidth;
-            newCenterMapPoint.Y = ((newCenterMapPoint.Y%_map.MapCoordinatesHeight) + _map.MapCoordinatesHeight) % _map.MapCoordinatesHeight;
+            newCenterMapVector.X = ((newCenterMapVector.X%_map.MapCoordinatesWidth) + _map.MapCoordinatesWidth) % _map.MapCoordinatesWidth;
+            newCenterMapVector.Y = ((newCenterMapVector.Y%_map.MapCoordinatesHeight) + _map.MapCoordinatesHeight) % _map.MapCoordinatesHeight;
             
 
-            MapPointLatLon newCenterGeoPoint = _map.MapPointToLatLon(newCenterMapPoint);
+            MapPointLatLon newCenterGeoPoint = _map.MapPointToLatLon(newCenterMapVector);
 
             _map.Position = newCenterGeoPoint;
          }

@@ -10,7 +10,7 @@ namespace SteuerSoft.Maps.Core.Material
    /// <summary>
    /// A struct representing a point in integer X/Y coordinates.
    /// </summary>
-   public struct MapPoint : IEquatable<MapPoint>
+   public struct MapVector : IEquatable<MapVector>
    {
       /// <summary>
       /// The X Coordinate
@@ -23,9 +23,9 @@ namespace SteuerSoft.Maps.Core.Material
       public int Y { get; set; }
 
 
-      public override bool Equals(object obj) => obj is MapPoint && Equals((MapPoint) obj);
+      public override bool Equals(object obj) => obj is MapVector && Equals((MapVector) obj);
 
-      public bool Equals(MapPoint other)
+      public bool Equals(MapVector other)
       {
          return X == other.X &&
                 Y == other.Y;
@@ -36,29 +36,29 @@ namespace SteuerSoft.Maps.Core.Material
          return 17 + X.GetHashCode() * 23 + Y.GetHashCode() * 31;
       }
 
-      public static MapPoint operator -(MapPoint a, MapPoint b)
+      public static MapVector operator -(MapVector a, MapVector b)
       {
-         return new MapPoint() {X = a.X - b.X, Y = a.Y - b.Y};
+         return new MapVector() {X = a.X - b.X, Y = a.Y - b.Y};
       }
 
-      public static MapPoint operator +(MapPoint a, MapPoint b)
+      public static MapVector operator +(MapVector a, MapVector b)
       {
-         return new MapPoint() { X = a.X + b.X, Y = a.Y + b.Y };
+         return new MapVector() { X = a.X + b.X, Y = a.Y + b.Y };
       }
 
-      public static MapPoint operator *(MapPoint a, double scale)
+      public static MapVector operator *(MapVector a, double scale)
       {
-         return new MapPoint() {X = (int)(a.X * scale), Y = (int)(a.Y * scale)};
+         return new MapVector() {X = (int)(a.X * scale), Y = (int)(a.Y * scale)};
       }
 
-      public static MapPoint operator *(double scale, MapPoint a)
+      public static MapVector operator *(double scale, MapVector a)
       {
          return a * scale;
       }
 
-      public static MapPoint operator /(MapPoint a, double div)
+      public static MapVector operator /(MapVector a, double div)
       {
-         return new MapPoint() {X = (int)(a.X / div), Y = (int)(a.Y / div)};
+         return new MapVector() {X = (int)(a.X / div), Y = (int)(a.Y / div)};
       }
    }
 }
