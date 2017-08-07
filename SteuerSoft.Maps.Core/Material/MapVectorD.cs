@@ -21,6 +21,11 @@ namespace SteuerSoft.Maps.Core.Material
       /// </summary>
       public double Y { get; set; }
 
+      public MapVectorD(MapVector source)
+      {
+         X = source.X;
+         Y = source.Y;
+      }
 
       public override bool Equals(object obj) => obj is MapVector && Equals((MapVector)obj);
 
@@ -47,7 +52,7 @@ namespace SteuerSoft.Maps.Core.Material
 
       public static MapVectorD operator *(MapVectorD a, double scale)
       {
-         return new MapVectorD() { X = (int)(a.X * scale), Y = (int)(a.Y * scale) };
+         return new MapVectorD() { X = (a.X * scale), Y = (a.Y * scale) };
       }
 
       public static MapVectorD operator *(double scale, MapVectorD a)
@@ -57,7 +62,7 @@ namespace SteuerSoft.Maps.Core.Material
 
       public static MapVectorD operator /(MapVectorD a, double div)
       {
-         return new MapVectorD() { X = (int)(a.X / div), Y = (int)(a.Y / div) };
+         return new MapVectorD() { X = (a.X / div), Y = (a.Y / div) };
       }
    }
 }

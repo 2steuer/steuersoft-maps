@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using SteuerSoft.Maps.Caching;
 using SteuerSoft.Maps.Core.Material;
 using SteuerSoft.Maps.MonoGame.Map;
+using SteuerSoft.Maps.MonoGame.Map.ValueTypes;
 using SteuerSoft.Maps.MonoGame.MapExtensions;
 using SteuerSoft.Maps.Providers;
 
@@ -58,7 +59,9 @@ namespace SteuerSoft.Maps.MonoGame
          // TODO: use this.Content to load your game content here
 
          _map = new MapControl(spriteBatch, GraphicsDevice, GraphicsDevice.Viewport.Bounds.ToMapRectangle());
-        
+         _map.Zoom = 15;
+         _map.Position = new MapPointLatLon(53.8265376, 10.4917827);
+        _map.ZoomMode = ZoomingType.Mouse;
       }
 
       /// <summary>

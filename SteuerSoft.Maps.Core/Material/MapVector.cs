@@ -22,6 +22,11 @@ namespace SteuerSoft.Maps.Core.Material
       /// </summary>
       public int Y { get; set; }
 
+      public MapVector(MapVectorD source)
+      {
+         X = (int) Math.Round(source.X);
+         Y = (int) Math.Round(source.Y);
+      }
 
       public override bool Equals(object obj) => obj is MapVector && Equals((MapVector) obj);
 

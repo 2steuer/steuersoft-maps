@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SteuerSoft.Maps.Caching;
 using SteuerSoft.Maps.Core.Material;
+using SteuerSoft.Maps.MonoGame.Map.ValueTypes;
 using SteuerSoft.Maps.MonoGame.MapExtensions;
 using SteuerSoft.Maps.Providers;
 
@@ -77,6 +78,11 @@ namespace SteuerSoft.Maps.MonoGame.Map
       public int MaxLoadedTiles { get; set; } = 128;
 
       /// <summary>
+      /// The current zooming type of the map control.
+      /// </summary>
+      public ZoomingType ZoomMode { get; set; } = ZoomingType.Center;
+
+      /// <summary>
       /// Represents the last mouse state.
       /// Is overwritten in every Update() call with the current mouse state.
       /// </summary>
@@ -86,6 +92,10 @@ namespace SteuerSoft.Maps.MonoGame.Map
       /// Indicates wether the mouse is currently dragging the map.
       /// </summary>
       private bool _dragging = false;
+
+      public int Zoom { get { return _map.Zoom; } set { _map.Zoom = value; } }
+
+      public MapPointLatLon Position { get { return _map.Position; } set { _map.Position = value; } }
 
       /// <summary>
       /// Initialises a new instance of the MapControl class.
@@ -271,12 +281,13 @@ namespace SteuerSoft.Maps.MonoGame.Map
       {
          MouseState currentState = Mouse.GetState();
 
+         MapVector mousePos = new MapVector() {X = currentState.X, Y = currentState.Y};
+
          if (_dragging)
          {
             MapVector oldVector = new MapVector() {X = _oldMouseState.X, Y = _oldMouseState.Y};
-            MapVector newVector = new MapVector() {X = currentState.X, Y = currentState.Y};
-
-            MapVector offset = (oldVector - newVector) / _map.CoordinateScale;
+            
+            MapVector offset = (oldVector - mousePos) / _map.CoordinateScale;
 
             MapVector centerMapVector = _map.LatLonToMapPoint(_map.Position);
             MapVector newCenterMapVector = centerMapVector + offset;
@@ -296,16 +307,15 @@ namespace SteuerSoft.Maps.MonoGame.Map
 
          int wheel = _oldMouseState.ScrollWheelValue - currentState.ScrollWheelValue;
 
-         if (wheel != 0)
-         {
-            Console.WriteLine();
-         }
+         bool zoom = false;
+         int newZoom = 0;
 
          if (wheel < 0)
          {
             if (_map.Zoom < _map.MaxZoom)
             {
-               _map.Zoom++;
+               zoom = true;
+               newZoom = _map.Zoom + 1;
             }
             
          }
@@ -313,7 +323,24 @@ namespace SteuerSoft.Maps.MonoGame.Map
          {
             if (_map.Zoom > _map.MinZoom)
             {
-               _map.Zoom--;
+               zoom = true;
+               newZoom = _map.Zoom - 1;
+            }
+         }
+
+         if (zoom)
+         {
+            switch (ZoomMode)
+            {
+               case ZoomingType.Center:
+                  SetZoomCenter(newZoom);
+                  break;
+
+               case ZoomingType.Mouse:
+                  MapVector viewPos = mousePos -
+                                      _map.ViewBounds.Location;
+                  SetZoomMouse(newZoom, viewPos);
+                  break;
             }
          }
 
@@ -329,6 +356,41 @@ namespace SteuerSoft.Maps.MonoGame.Map
          }
 
          _oldMouseState = currentState;
+      }
+
+      /// <summary>
+      /// Zoom the map around the center of the displayed map.
+      /// </summary>
+      /// <param name="newZoom">The new zoom level</param>
+      private void SetZoomCenter(int newZoom)
+      {
+         _map.Zoom = newZoom;
+      }
+
+      /// <summary>
+      /// Zoom the map around the given view coordinate within the displayed map.
+      /// </summary>
+      /// <param name="zoom">The new zoom level</param>
+      /// <param name="mousePos">The point within the view coordinate system to zoom the map around</param>
+      private void SetZoomMouse(int zoom, MapVector mousePos)
+      {
+         MapVectorD mouse = new MapVectorD(mousePos);
+         MapVectorD middle = new MapVectorD() {X = _map.ViewBounds.Width / 2.0, Y = _map.ViewBounds.Height / 2.0};
+         MapVectorD offset = middle - mouse;
+
+         double newScale = Math.Pow(2, zoom)/Math.Pow(2, _map.Zoom);
+
+         MapVectorD newOffset = offset/newScale;
+
+         MapVectorD newMiddle = mouse + newOffset;
+
+         _map.Zoom = zoom;
+
+         MapVector oldMiddle = _map.LatLonToMapPoint(_map.Position);
+         MapVector mouseMapPoint = _map.ViewPointToMapPoint(mousePos);
+         MapVector newMiddleMapPoint = _map.ViewPointToMapPoint(newMiddle);
+
+         _map.Position = _map.MapPointToLatLon(newMiddleMapPoint);
       }
    }
 }

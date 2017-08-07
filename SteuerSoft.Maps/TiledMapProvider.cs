@@ -46,6 +46,13 @@ namespace SteuerSoft.Maps
    /// Note, that a tile can only be identified by a zoom level and X/Y coordinates.</description>
    /// </item>
    /// 
+   /// <item>
+   ///   <term>View Coordiantes</term>
+   ///   <description>Coordinates within the viewport of the map.
+   ///   Describing a point within the map control as difference vector from the top-left point
+   ///   of the controls viewport.</description>
+   /// </item>
+   /// 
    /// </list>
    /// </summary>
    public class TiledMapProvider
@@ -302,6 +309,23 @@ namespace SteuerSoft.Maps
 
          return newP;
       }
+
+      /// <summary>
+      /// Converts a point within the view of the map (offset from top left of the viewbounds) to the MapCoordinate of that point.
+      /// </summary>
+      /// <param name="viewPoint">The point in the view coordinate system</param>
+      /// <returns>The corresponding point in the map coordinate system.</returns>
+      public MapVector ViewPointToMapPoint(MapVectorD viewPoint)
+      {
+         MapVectorD middleMapPoint = new MapVectorD(LatLonToMapPoint(Position));
+
+         MapVectorD viewMiddlePoint = new MapVectorD() {X = ViewBounds.Width / 2.0, Y = ViewBounds.Height / 2.0};
+         MapVectorD viewOffset = viewPoint - viewMiddlePoint;
+
+         return new MapVector(middleMapPoint + (viewOffset/CoordinateScale));
+      }
+
+      public MapVector ViewPointToMapPoint(MapVector viewPoint) => ViewPointToMapPoint(new MapVectorD(viewPoint));
 
       public List<TileDrawInfo> GetDrawTiles()
       {

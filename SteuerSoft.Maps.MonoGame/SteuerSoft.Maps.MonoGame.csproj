@@ -59,6 +59,7 @@
     <Compile Include="Map\MapControl.cs" />
     <Compile Include="Map\Markers\Base\IconMarkerBase.cs" />
     <Compile Include="Map\Markers\Interface\IIconMarker.cs" />
+    <Compile Include="Map\ValueTypes\ZoomingType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
