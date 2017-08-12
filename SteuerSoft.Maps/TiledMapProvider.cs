@@ -327,6 +327,11 @@ namespace SteuerSoft.Maps
 
       public MapVector ViewPointToMapPoint(MapVector viewPoint) => ViewPointToMapPoint(new MapVectorD(viewPoint));
 
+      public MapPointLatLon ViewPointToLatLon(MapVectorD viewPoint)
+         => MapPointToLatLon(ViewPointToMapPoint(viewPoint));
+
+      public MapPointLatLon ViewPointToLatLon(MapVector viewPoint)
+         => ViewPointToLatLon(new MapVectorD(viewPoint));
       public List<TileDrawInfo> GetDrawTiles()
       {
          List<TileDrawInfo> info = new List<TileDrawInfo>();

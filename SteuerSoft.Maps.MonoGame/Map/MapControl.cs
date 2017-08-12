@@ -232,6 +232,7 @@ namespace SteuerSoft.Maps.MonoGame.Map
       /// </summary>
       /// <param name="rectangleToDraw">The rectangle around which the border shall be drawn.</param>
       /// <param name="thicknessOfBorder">The thickness of the border that is drawn.</param>
+      /// <param name="borderColor">Color of the border</param>
       private void DrawBorder(Rectangle rectangleToDraw, int thicknessOfBorder, Color borderColor)
       {
          // Draw top line
@@ -376,21 +377,14 @@ namespace SteuerSoft.Maps.MonoGame.Map
       {
          MapVectorD mouse = new MapVectorD(mousePos);
          MapVectorD middle = new MapVectorD() {X = _map.ViewBounds.Width / 2.0, Y = _map.ViewBounds.Height / 2.0};
-         MapVectorD offset = middle - mouse;
+         MapVectorD offset = middle - mouse; // Vector from mouse position to middle position
 
-         double newScale = Math.Pow(2, zoom)/Math.Pow(2, _map.Zoom);
-
-         MapVectorD newOffset = offset/newScale;
-
-         MapVectorD newMiddle = mouse + newOffset;
-
+         // 1. move the map to the position the mouse is at
+         _map.Position = _map.ViewPointToLatLon(mouse);
+         // 2. zoom the map
          _map.Zoom = zoom;
-
-         MapVector oldMiddle = _map.LatLonToMapPoint(_map.Position);
-         MapVector mouseMapPoint = _map.ViewPointToMapPoint(mousePos);
-         MapVector newMiddleMapPoint = _map.ViewPointToMapPoint(newMiddle);
-
-         _map.Position = _map.MapPointToLatLon(newMiddleMapPoint);
+         // 3. move the map back about the same amount we move it in (1.) 
+         _map.Position = _map.ViewPointToLatLon(middle + offset); // Plus here because the offset is mouse -> middle
       }
    }
 }
