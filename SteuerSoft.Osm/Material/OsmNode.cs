@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Xml.Linq;
 using SteuerSoft.Osm.Material.Base;
 
-namespace SteuerSoft.Osm.Loading.Material
+namespace SteuerSoft.Osm.Material
 {
    public class OsmNode : OsmTaggableBase
    {

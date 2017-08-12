@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Linq;
-using SteuerSoft.Osm.Loading.Material;
+using SteuerSoft.Osm.Material;
 
 namespace SteuerSoft.Osm.Loading
 {

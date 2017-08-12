@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using SteuerSoft.Osm.Material.Base;
 
-namespace SteuerSoft.Osm.Loading.Material
+namespace SteuerSoft.Osm.Material
 {
    public class OsmWay : OsmTaggableBase
    {

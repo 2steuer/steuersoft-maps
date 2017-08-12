@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace SteuerSoft.Osm.StreetNetwork.Material
 {
-   public class OsmConnection
+   public class Path
    {
-      public OsmWaypoint Target { get; set; }
-
-      public OsmConnection(OsmWaypoint target)
-      {
-         Target = target;
-      }
+      public List<Waypoint> Waypoints { get; } = new List<Waypoint>();
+      
    }
 }

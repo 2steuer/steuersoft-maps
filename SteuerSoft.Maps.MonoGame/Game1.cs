@@ -7,8 +7,13 @@ using SteuerSoft.Maps.Controls.MonoGame;
 using SteuerSoft.Maps.Controls.MonoGame.MapExtensions;
 using SteuerSoft.Maps.Controls.MonoGame.ValueTypes;
 using SteuerSoft.Maps.Core.Material;
+using SteuerSoft.Maps.Core.Material.Elements.Layers;
+using SteuerSoft.Maps.Core.Material.Elements.Path;
 using SteuerSoft.Maps.MonoGame.OsmExtensions;
 using SteuerSoft.Osm.Loading;
+using SteuerSoft.Osm.Material;
+using SteuerSoft.Osm.StreetNetwork;
+using SteuerSoft.Osm.StreetNetwork.Material;
 
 namespace SteuerSoft.Maps.MonoGame
 {
@@ -21,6 +26,17 @@ namespace SteuerSoft.Maps.MonoGame
       SpriteBatch spriteBatch;
 
       private MapControl _map;
+      private MapLayer _routeLayer;
+      private MapPath _currentPath;
+
+      private int _clickIndex = 0;
+
+      private Waypoint _startPoint = null;
+      private Waypoint _endPoint = null;
+
+      private OsmLoader _osm = null;
+      private OsmStreetSystem _streets = null;
+
 
       public Game1()
       {
@@ -55,7 +71,8 @@ namespace SteuerSoft.Maps.MonoGame
       /// </summary>
       protected override void LoadContent()
       {
-         var ld = OsmLoader.Load("K:\\OsmData\\Reinfeld.osm");
+         _osm = OsmLoader.Load("K:\\OsmData\\map.osm");
+         _streets = OsmStreetSystem.Build(_osm);
 
          // Create a new SpriteBatch, which can be used to draw textures.
          spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -67,28 +84,42 @@ namespace SteuerSoft.Maps.MonoGame
          _map.Position = new MapPointLatLon(53.8265376, 10.4917827);
          _map.ZoomMode = ZoomingType.Mouse;
 
-         var pts = new MapPointLatLon[]
-         {
-            new MapPointLatLon(53.8265376, 10.4917827),
-            new MapPointLatLon(53.827697, 10.494692),
-            new MapPointLatLon(53.828576, 10.492744),
-            new MapPointLatLon(53.830815, 10.497905),   
-         };
+         _routeLayer = _map.AddLayer();
 
-         var l = _map.AddLayer();
+         _map.OnRightClick += _map_OnRightClick;
+      }
 
-         string[] excludes =
-         {
-            "footway",
-            "bridleway",
-            "steps",
-            "path",
-            "proposed"
-         };
+      private void _map_OnRightClick(object sender, MapPointLatLon pos)
+      {
+         Waypoint click = new Waypoint(new OsmNode(1, pos.Lat, pos.Lon));
 
-         foreach (var way in ld.Ways.Values.Where(w => w.HasTag("highway") && !excludes.Contains(w.GetTag("highway"))))
+         Waypoint nearest = _streets.WayPoints.Values.OrderBy(w => w.DistanceTo(click)).First();
+
+         if (_clickIndex == 0)
          {
-            _map.AddPath(l, way.Nodes.Select(n => n.ToMapPointLatLon()), Color.Red);
+            if (_currentPath != null)
+            {
+               
+               _map.RemovePath(_currentPath);
+               _currentPath = null;
+            }
+
+            _startPoint = nearest;
+            _endPoint = null;
+
+            _clickIndex = 1;
+         }
+         else if (_clickIndex == 1)
+         {
+            _endPoint = nearest;
+
+            var p = _streets.FindPath(_startPoint, _endPoint);
+            if (p != null)
+            {
+               _currentPath = _map.AddPath(_routeLayer, p.Waypoints.Select(wp => new MapPointLatLon(wp.Lat, wp.Lon)), Color.Red);
+            }
+
+            _clickIndex = 0;
          }
       }
 

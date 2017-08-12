@@ -44,11 +44,15 @@
     <Compile Include="Material\OsmNode.cs" />
     <Compile Include="Material\OsmWay.cs" />
     <Compile Include="Loading\OsmLoader.cs" />
+    <Compile Include="PathFinding\Algorithms\DijkstraAlgorithm.cs" />
+    <Compile Include="PathFinding\Algorithms\Interface\IPathfindingAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StreetNetwork\Material\OsmConnection.cs" />
-    <Compile Include="StreetNetwork\Material\OsmWaypoint.cs" />
+    <Compile Include="StreetNetwork\Material\Connection.cs" />
+    <Compile Include="StreetNetwork\Material\Path.cs" />
+    <Compile Include="StreetNetwork\Material\Waypoint.cs" />
     <Compile Include="StreetNetwork\OsmStreetSystem.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

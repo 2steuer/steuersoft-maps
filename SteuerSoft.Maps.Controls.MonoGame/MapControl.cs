@@ -15,11 +15,15 @@ using SteuerSoft.Maps.Providers;
 
 namespace SteuerSoft.Maps.Controls.MonoGame
 {
+   public delegate void MouseClickDelegate(object sender, MapPointLatLon pos);
+
    /// <summary>
    /// A MapControl that shall be drawn within a MonoGame game window.
    /// </summary>
    public class MapControl
    {
+      public event MouseClickDelegate OnRightClick;
+
       /// <summary>
       /// The SpriteBatch that shall be used to draw the map on.
       /// </summary>
@@ -413,6 +417,11 @@ namespace SteuerSoft.Maps.Controls.MonoGame
          {
             // Mouse down
             _dragging = true;
+         }
+
+         if (_oldMouseState.RightButton == ButtonState.Pressed && currentState.RightButton == ButtonState.Released)
+         {
+            OnRightClick?.Invoke(this, _map.ViewPointToLatLon(mousePos));
          }
 
          _oldMouseState = currentState;
