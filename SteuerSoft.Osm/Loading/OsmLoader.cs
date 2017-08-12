@@ -24,36 +24,13 @@ namespace SteuerSoft.Osm.Loading
 
          foreach (var xElement in root.Elements("node"))
          {
-            long id = long.Parse(xElement.Attribute("id").Value);
-            double lat = double.Parse(xElement.Attribute("lat").Value, CultureInfo.InvariantCulture);
-            double lng = double.Parse(xElement.Attribute("lon").Value, CultureInfo.InvariantCulture);
-
-            OsmNode newNode = new OsmNode(id, lat, lng);
-
-            foreach (var tagE in xElement.Elements("tag"))
-            {
-               newNode.Tags.Add(tagE.Attribute("k").Value, tagE.Attribute("v").Value);
-            }
-
-            Nodes.Add(id, newNode);
+            var newNode = OsmNode.FromXElement(xElement);
+            Nodes.Add(newNode.Id, newNode);
          }
 
          foreach (var xElement in root.Elements("way"))
          {
-            OsmWay newWay = new OsmWay();
-            newWay.Id = long.Parse(xElement.Attribute("id").Value);
-
-            foreach (var element in xElement.Elements("nd"))
-            {
-               long nodeId = long.Parse(element.Attribute("ref").Value);
-               newWay.Nodes.Add(Nodes[nodeId]);
-            }
-
-            foreach (var tagE in xElement.Elements("tag"))
-            {
-               newWay.Tags.Add(tagE.Attribute("k").Value, tagE.Attribute("v").Value);
-            }
-
+            var newWay = OsmWay.FromXElement(xElement, Nodes);
             Ways.Add(newWay.Id, newWay);
          }
       }

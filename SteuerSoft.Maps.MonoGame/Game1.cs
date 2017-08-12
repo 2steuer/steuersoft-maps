@@ -7,6 +7,7 @@ using SteuerSoft.Maps.Controls.MonoGame;
 using SteuerSoft.Maps.Controls.MonoGame.MapExtensions;
 using SteuerSoft.Maps.Controls.MonoGame.ValueTypes;
 using SteuerSoft.Maps.Core.Material;
+using SteuerSoft.Maps.MonoGame.OsmExtensions;
 using SteuerSoft.Osm.Loading;
 
 namespace SteuerSoft.Maps.MonoGame
@@ -76,9 +77,18 @@ namespace SteuerSoft.Maps.MonoGame
 
          var l = _map.AddLayer();
 
-         foreach (var way in ld.Ways.Values)
+         string[] excludes =
          {
-            
+            "footway",
+            "bridleway",
+            "steps",
+            "path",
+            "proposed"
+         };
+
+         foreach (var way in ld.Ways.Values.Where(w => w.HasTag("highway") && !excludes.Contains(w.GetTag("highway"))))
+         {
+            _map.AddPath(l, way.Nodes.Select(n => n.ToMapPointLatLon()), Color.Red);
          }
       }
 
