@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using SteuerSoft.Maps.Core.Material;
 
-namespace SteuerSoft.Maps.MonoGame.MapExtensions
+namespace SteuerSoft.Maps.Controls.MonoGame.MapExtensions
 {
    /// <summary>
    /// This class contains extension methods for the different data types (Rectangles etc.)
@@ -32,6 +27,16 @@ namespace SteuerSoft.Maps.MonoGame.MapExtensions
       public static MapRectangle ToMapRectangle(this Rectangle rect)
       {
          return new MapRectangle(rect.X, rect.Y, rect.Width, rect.Height);
+      }
+
+      public static Vector2 ToVector2(this MapVectorD vect)
+      {
+         return new Vector2((float)vect.X, (float)vect.Y);
+      }
+
+      public static Vector2 ToVector2(this MapVector vect)
+      {
+         return new Vector2((float)vect.X, (float)vect.Y);
       }
    }
 }

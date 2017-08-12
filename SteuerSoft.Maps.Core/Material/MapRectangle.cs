@@ -58,5 +58,24 @@ namespace SteuerSoft.Maps.Core.Material
          Width = width;
          Height = height;
       }
+
+      public bool Contains(MapVectorD vect, bool onBorder = true)
+      {
+         if (onBorder)
+         {
+            return (vect.X >= X)
+                && (vect.Y >= Y)
+                && (vect.X <= X + Width)
+                && (vect.Y <= Y + Height);
+         }
+         else
+         {
+            return (vect.X > X)
+                && (vect.Y > Y)
+                && (vect.X < X + Width)
+                && (vect.Y < Y + Height);
+         }
+         
+      }
    }
 }

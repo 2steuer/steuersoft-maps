@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps.MonoGame", 
 		{DB332FD5-A677-48B4-AEDF-2FE6885B6858} = {DB332FD5-A677-48B4-AEDF-2FE6885B6858}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Osm", "SteuerSoft.Osm\SteuerSoft.Osm.csproj", "{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps.Controls.MonoGame", "SteuerSoft.Maps.Controls.MonoGame\SteuerSoft.Maps.Controls.MonoGame.csproj", "{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,22 @@ Global
 		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Release|Any CPU.ActiveCfg = Release|x86
 		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Release|x86.ActiveCfg = Release|x86
 		{5B53A8EB-5B71-4F83-A591-CC4A498A5BD0}.Release|x86.Build.0 = Release|x86
+		{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}.Debug|x86.Build.0 = Debug|Any CPU
+		{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}.Release|x86.ActiveCfg = Release|Any CPU
+		{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}.Release|x86.Build.0 = Release|Any CPU
+		{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}.Debug|x86.Build.0 = Debug|Any CPU
+		{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}.Release|x86.ActiveCfg = Release|Any CPU
+		{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

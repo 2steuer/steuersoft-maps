@@ -1,12 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SteuerSoft.Maps.Caching;
+using SteuerSoft.Maps.Controls.MonoGame;
+using SteuerSoft.Maps.Controls.MonoGame.MapExtensions;
+using SteuerSoft.Maps.Controls.MonoGame.ValueTypes;
 using SteuerSoft.Maps.Core.Material;
-using SteuerSoft.Maps.MonoGame.Map;
-using SteuerSoft.Maps.MonoGame.Map.ValueTypes;
-using SteuerSoft.Maps.MonoGame.MapExtensions;
-using SteuerSoft.Maps.Providers;
+using SteuerSoft.Osm.Loading;
 
 namespace SteuerSoft.Maps.MonoGame
 {
@@ -53,6 +54,8 @@ namespace SteuerSoft.Maps.MonoGame
       /// </summary>
       protected override void LoadContent()
       {
+         var ld = OsmLoader.Load("K:\\OsmData\\Reinfeld.osm");
+
          // Create a new SpriteBatch, which can be used to draw textures.
          spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -61,7 +64,22 @@ namespace SteuerSoft.Maps.MonoGame
          _map = new MapControl(spriteBatch, GraphicsDevice, GraphicsDevice.Viewport.Bounds.ToMapRectangle());
          _map.Zoom = 15;
          _map.Position = new MapPointLatLon(53.8265376, 10.4917827);
-        _map.ZoomMode = ZoomingType.Mouse;
+         _map.ZoomMode = ZoomingType.Mouse;
+
+         var pts = new MapPointLatLon[]
+         {
+            new MapPointLatLon(53.8265376, 10.4917827),
+            new MapPointLatLon(53.827697, 10.494692),
+            new MapPointLatLon(53.828576, 10.492744),
+            new MapPointLatLon(53.830815, 10.497905),   
+         };
+
+         var l = _map.AddLayer();
+
+         foreach (var way in ld.Ways.Values)
+         {
+            
+         }
       }
 
       /// <summary>

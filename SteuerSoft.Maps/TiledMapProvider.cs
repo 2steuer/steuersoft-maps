@@ -319,7 +319,7 @@ namespace SteuerSoft.Maps
       {
          MapVectorD middleMapPoint = new MapVectorD(LatLonToMapPoint(Position));
 
-         MapVectorD viewMiddlePoint = new MapVectorD() {X = ViewBounds.Width / 2.0, Y = ViewBounds.Height / 2.0};
+         MapVectorD viewMiddlePoint = new MapVectorD() {X = ViewBounds.X + ViewBounds.Width / 2.0, Y = ViewBounds.Y + ViewBounds.Height / 2.0};
          MapVectorD viewOffset = viewPoint - viewMiddlePoint;
 
          return new MapVector(middleMapPoint + (viewOffset/CoordinateScale));
@@ -332,6 +332,19 @@ namespace SteuerSoft.Maps
 
       public MapPointLatLon ViewPointToLatLon(MapVector viewPoint)
          => ViewPointToLatLon(new MapVectorD(viewPoint));
+
+      public MapVectorD MapPointToViewPoint(MapVectorD mapPoint)
+      {
+         var topLeftMap = new MapVectorD(ViewPointToMapPoint(ViewBounds.Location));
+         return (mapPoint - topLeftMap)*CoordinateScale;
+      }
+
+      public MapVectorD LatLonToViewPoint(MapPointLatLon latLon)
+      {
+         
+         return MapPointToViewPoint(new MapVectorD(LatLonToMapPoint(latLon)));
+      }
+
       public List<TileDrawInfo> GetDrawTiles()
       {
          List<TileDrawInfo> info = new List<TileDrawInfo>();

@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using SteuerSoft.Maps.Caching;
+using SteuerSoft.Maps.Controls.MonoGame.MapExtensions;
+using SteuerSoft.Maps.Controls.MonoGame.ValueTypes;
 using SteuerSoft.Maps.Core.Material;
-using SteuerSoft.Maps.MonoGame.Map.ValueTypes;
-using SteuerSoft.Maps.MonoGame.MapExtensions;
+using SteuerSoft.Maps.Core.Material.Elements.Layers;
+using SteuerSoft.Maps.Core.Material.Elements.Path;
+using SteuerSoft.Maps.Core.Material.Elements.Polygon;
 using SteuerSoft.Maps.Providers;
 
-namespace SteuerSoft.Maps.MonoGame.Map
+namespace SteuerSoft.Maps.Controls.MonoGame
 {
    /// <summary>
    /// A MapControl that shall be drawn within a MonoGame game window.
    /// </summary>
-   class MapControl
+   public class MapControl
    {
       /// <summary>
       /// The SpriteBatch that shall be used to draw the map on.
@@ -97,6 +97,11 @@ namespace SteuerSoft.Maps.MonoGame.Map
 
       public MapPointLatLon Position { get { return _map.Position; } set { _map.Position = value; } }
 
+      private List<MapLayer> _layers = new List<MapLayer>();
+
+      private Dictionary<MapPath, Color> _pathColors = new Dictionary<MapPath, Color>();
+      private Dictionary<MapPath, MapLayer> _pathLayers = new Dictionary<MapPath, MapLayer>();
+
       /// <summary>
       /// Initialises a new instance of the MapControl class.
       /// Sets OpenStreetMap_Original and Disc Caching as the default Map and caching providers.
@@ -109,7 +114,6 @@ namespace SteuerSoft.Maps.MonoGame.Map
       {
          _sBatch = batch;
          _device = device;
-         
          _map = new TiledMapProvider(OsmProvider.GetInstance(), new DiscTileCaching("cache"));
 
          _map.Zoom = _map.Provider.MinZoom;
@@ -143,9 +147,64 @@ namespace SteuerSoft.Maps.MonoGame.Map
          {
             DrawCross(crossRect, MiddleCrossThickness, MiddleCrossColor);
          }
-         
+
+         foreach (MapLayer layer in _layers)
+         {
+            foreach (var path in layer.Paths)
+            {
+               DrawPath(path);
+            }
+
+            foreach (var polygon in layer.Polygons)
+            {
+               DrawPolygon(polygon);
+            }
+         }
 
          _sBatch.End();
+      }
+
+      private void DrawPath(MapPath path, bool close = false)
+      {
+         if (path.Points.Count < 2)
+         {
+            return;
+         }
+
+         Color c = _pathColors[path];
+         MapVectorD lastView = _map.LatLonToViewPoint(path.Points[0]);
+
+         for (int i = 1; i < path.Points.Count; i++)
+         {
+           
+            var currentView = _map.LatLonToViewPoint(path.Points[i]);
+
+            if (_map.ViewBounds.Contains(currentView) || _map.ViewBounds.Contains(lastView))
+            {
+               _sBatch.DrawLine(lastView.ToVector2(), currentView.ToVector2(), c, (float)path.LineWidth);
+            }
+
+            lastView = currentView;
+         }
+
+         if (close)
+         {
+            var firstView = _map.LatLonToViewPoint(path.Points[0]);
+            if (_map.ViewBounds.Contains(firstView) || _map.ViewBounds.Contains(lastView))
+            {
+               _sBatch.DrawLine(lastView.ToVector2(), firstView.ToVector2(), c, (float)path.LineWidth);
+            }
+         }
+      }
+
+      private void DrawPolygon(MapPolygon poly)
+      {
+         if (poly.Points.Count < 2)
+         {
+            return;
+         }
+
+         DrawPath(poly, true);
       }
 
       /// <summary>
@@ -385,6 +444,61 @@ namespace SteuerSoft.Maps.MonoGame.Map
          _map.Zoom = zoom;
          // 3. move the map back about the same amount we move it in (1.) 
          _map.Position = _map.ViewPointToLatLon(middle + offset); // Plus here because the offset is mouse -> middle
+      }
+
+      public MapLayer AddLayer()
+      {
+         var layer = new MapLayer();
+         _layers.Add(layer);
+
+         return layer;
+      }
+
+      public bool RemoveLayer(MapLayer layer)
+      {
+         return _layers.Remove(layer);
+      }
+
+      public MapPath AddPath(MapLayer layer, IEnumerable<MapPointLatLon> points, Color color)
+      {
+         if (!_layers.Contains(layer))
+         {
+            return null;
+         }
+         var path = new MapPath(points);
+         layer.Paths.Add(path);
+         _pathColors.Add(path, color);
+         _pathLayers.Add(path, layer);
+
+         return path;
+      }
+
+      public void RemovePath(MapPath path)
+      {
+         _pathColors.Remove(path);
+         _pathLayers[path].Paths.Remove(path);
+         _pathLayers.Remove(path);
+      }
+
+      public MapPolygon AddPolygon(MapLayer layer, IEnumerable<MapPointLatLon> points, Color color)
+      {
+         if (!_layers.Contains(layer))
+         {
+            return null;
+         }
+         var poly = new MapPolygon(points);
+         layer.Polygons.Add(poly);
+         _pathColors.Add(poly, color);
+         _pathLayers.Add(poly, layer);
+
+         return poly;
+      }
+
+      public void RemovePolygon(MapPolygon poly)
+      {
+         _pathColors.Remove(poly);
+         _pathLayers[poly].Paths.Remove(poly);
+         _pathLayers.Remove(poly);
       }
    }
 }

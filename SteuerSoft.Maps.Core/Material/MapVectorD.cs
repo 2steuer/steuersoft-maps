@@ -27,6 +27,12 @@ namespace SteuerSoft.Maps.Core.Material
          Y = source.Y;
       }
 
+      public MapVectorD(double x, double y)
+      {
+         X = x;
+         Y = y;
+      }
+
       public override bool Equals(object obj) => obj is MapVector && Equals((MapVector)obj);
 
       public bool Equals(MapVectorD other)
