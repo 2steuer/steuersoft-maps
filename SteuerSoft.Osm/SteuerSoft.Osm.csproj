@@ -51,7 +51,7 @@
     <Compile Include="PathFinding\Algorithms\DijkstraAlgorithm.cs" />
     <Compile Include="PathFinding\Algorithms\Interface\IPathfindingAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StreetNetwork\Material\Connection.cs" />
+    <Compile Include="StreetNetwork\Material\ConnectionInfo.cs" />
     <Compile Include="StreetNetwork\Material\Path.cs" />
     <Compile Include="StreetNetwork\Material\Waypoint.cs" />
     <Compile Include="StreetNetwork\OsmStreetSystem.cs" />

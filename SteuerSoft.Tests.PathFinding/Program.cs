@@ -56,7 +56,13 @@ namespace SteuerSoft.Tests.PathFinding
             MeasureTime(() =>
             {
                Console.WriteLine($"[{i}] Looking for a path in the graph....");
-               var p = dijkstra.FindPath(start, end);
+               var p = dijkstra.FindPath(start, end, (from, to) =>
+               {
+                  double distance = from.DistanceTo(to);
+                  double maxSpeed = from.GetInfoTo(to).MaxSpeed;
+
+                  return distance/maxSpeed;
+               });
 
                Console.WriteLine($"Finished in {dijkstra.Steps} steps.");
                Console.WriteLine($"Inspected {dijkstra.InspectedNodes}, visited {dijkstra.VisitedNodes}");

@@ -7,7 +7,7 @@ using SteuerSoft.Osm.StreetNetwork.Material;
 
 namespace SteuerSoft.Osm.PathFinding.Algorithms.Interface
 {
-   interface IPathfindingAlgorithm
+   public interface IPathfindingAlgorithm
    {
       Path FindPath(Waypoint start, Waypoint end);
    }

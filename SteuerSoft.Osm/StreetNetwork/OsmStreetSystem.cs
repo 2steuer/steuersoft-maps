@@ -22,14 +22,33 @@ namespace SteuerSoft.Osm.StreetNetwork
          "tertiary",
          "unclassified",
          "residential",
-         "service",
          "motorway_link",
          "trunk_link",
          "primary_link",
          "secondary_link",
-         "tertiary_link"
+         "tertiary_link",
+         "service"
       };
 
+      private static Dictionary<string, string> _defaultMaxSpeeds = new Dictionary<string, string>()
+      {
+         {"motorway", "130"},
+         {"trunk", "120"},
+         {"primary", "100"},
+         {"secondary", "70"},
+         {"tertiary", "50"},
+         {"unclassified", "30"},
+         {"residential", "10"},
+         {"motorway_link", "130"},
+         {"trunk_link", "120"},
+         {"primary_link", "100" },
+         {"secondary_link", "70"},
+         {"tertiary_link", "50"},
+         {"service", "20"}
+      };
+
+      private static int _maxSpeed = 130;
+      
       public Dictionary<long, Waypoint> WayPoints { get; } = new Dictionary<long, Waypoint>();
 
       private IPathfindingAlgorithm _pathFinder = new DijkstraAlgorithm();
@@ -66,15 +85,17 @@ namespace SteuerSoft.Osm.StreetNetwork
 
             Waypoint lastPoint = newSystem.GetWaypointForNode(way.Nodes[0]);
 
+            var conInfo = MakeConnectionInfo(way);
+
             for (int i = 1; i < way.Nodes.Count; i++)
             {
                var current = newSystem.GetWaypointForNode(way.Nodes[i]);
 
-               lastPoint.ConnectTo(current);
+               lastPoint.ConnectTo(current, conInfo);
 
                if (!oneWay)
                {
-                  current.ConnectTo(lastPoint);
+                  current.ConnectTo(lastPoint, conInfo);
                }
 
                lastPoint = current;
@@ -82,6 +103,37 @@ namespace SteuerSoft.Osm.StreetNetwork
          }
 
          return newSystem;
+      }
+
+      private static ConnectionInfo MakeConnectionInfo(OsmWay way)
+      {
+         ConnectionInfo i = new ConnectionInfo();
+
+         if (!way.HasTag("maxspeed"))
+         {
+            i.MaxSpeed = double.Parse(_defaultMaxSpeeds[way.GetTag("highway")]);
+         }
+         else
+         {
+            string speed = way.GetTag("maxspeed");
+
+            if (speed == "none")
+            {
+               i.MaxSpeed = _maxSpeed;
+
+            }
+            else
+            {
+               i.MaxSpeed = double.Parse(speed);
+            }
+         }
+
+         return i;
+      }
+
+      public void SetPathFinder(IPathfindingAlgorithm finder)
+      {
+         _pathFinder = finder;
       }
 
       public Path FindPath(Waypoint start, Waypoint end)

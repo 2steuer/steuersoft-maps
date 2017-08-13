@@ -19,14 +19,22 @@ namespace SteuerSoft.Osm.StreetNetwork.Material
 
       public IEnumerable<Waypoint> Connections => _connections;
 
+      private Dictionary<Waypoint, ConnectionInfo> _connInfos = new Dictionary<Waypoint, ConnectionInfo>();
+
       public Waypoint(OsmNode node)
       {
          _node = node;
       }
 
-      public void ConnectTo(Waypoint wp)
+      public void ConnectTo(Waypoint wp, ConnectionInfo info)
       {
          _connections.Add(wp);
+         _connInfos[wp] = info;
+      }
+
+      public ConnectionInfo GetInfoTo(Waypoint wp)
+      {
+         return _connInfos[wp];
       }
 
       /// <summary>

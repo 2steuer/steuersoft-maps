@@ -20,6 +20,19 @@ namespace SteuerSoft.Osm.PathFinding.Algorithms
       HashSet<Waypoint> _visited = new HashSet<Waypoint>();
       Dictionary<Waypoint, Waypoint> _predecessors = new Dictionary<Waypoint, Waypoint>();
 
+      public Func<Waypoint, Waypoint, double> CostFunction { get; set; }
+
+      public DijkstraAlgorithm()
+         :this((wpstart, wpend) => wpstart.DistanceTo(wpend))
+      {
+         
+      }
+
+      public DijkstraAlgorithm(Func<Waypoint, Waypoint, double> costFunc)
+      {
+         CostFunction = costFunc;
+      }
+
       public Path FindPath(Waypoint start, Waypoint end)
       {
          bool found = false;
@@ -90,7 +103,7 @@ namespace SteuerSoft.Osm.PathFinding.Algorithms
          foreach (var neighbour in neighbours)
          {
             var neighbourDistance = GetDistance(neighbour);
-            var distToNeighbour = current.DistanceTo(neighbour);
+            var distToNeighbour = CostFunction(current, neighbour);
 
             var distSum = currentDist + distToNeighbour;
 
