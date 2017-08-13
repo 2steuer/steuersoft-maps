@@ -3,32 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Priority_Queue;
 using SteuerSoft.Osm.PathFinding.Algorithms.Interface;
 using SteuerSoft.Osm.StreetNetwork.Material;
 
 namespace SteuerSoft.Osm.PathFinding.Algorithms
 {
-   class DijkstraAlgorithm : IPathfindingAlgorithm
+   public class DijkstraAlgorithm : IPathfindingAlgorithm
    {
+      public int Steps = 0;
+      public int VisitedNodes = 0;
+      public int InspectedNodes = 0;
+
+      private Dictionary<Waypoint, double> _distances = new Dictionary<Waypoint, double>();
+      SimplePriorityQueue<Waypoint, double> _distancesSorted = new SimplePriorityQueue<Waypoint, double>();
+      HashSet<Waypoint> _visited = new HashSet<Waypoint>();
+      Dictionary<Waypoint, Waypoint> _predecessors = new Dictionary<Waypoint, Waypoint>();
+
       public Path FindPath(Waypoint start, Waypoint end)
       {
          bool found = false;
-         Dictionary<Waypoint, double> distances = new Dictionary<Waypoint, double>();
-         HashSet<Waypoint> visited = new HashSet<Waypoint>();
-         Dictionary<Waypoint, Waypoint> pres = new Dictionary<Waypoint, Waypoint>();
+
+         _distances.Clear();
+         _distancesSorted.Clear();
+         _visited.Clear();
+         _predecessors.Clear();
 
          // init with d(start)=0
-         distances.Add(start, 0);
+         _distances.Add(start, 0);
 
          Waypoint current = start;
-         visited.Add(start);
+         _visited.Add(start);
+
+         Steps = 0;
+         VisitedNodes = 0;
+         InspectedNodes = 0;
 
          while (true)
          {
-            var unvisitedNeighbours = current.Connections.Where(c => !visited.Contains(c));
-            UpdateDistances(current, unvisitedNeighbours, distances, pres);
+            Steps++;
+            var unvisitedNeighbours = current.Connections.Where(c => !_visited.Contains(c));
+            UpdateDistances(current, unvisitedNeighbours);
 
-            current = distances.Keys.Where(k => !visited.Contains(k)).OrderBy(d => distances[d]).FirstOrDefault();
+
+            current = _distancesSorted.Count > 0 ? _distancesSorted.Dequeue() : null;
 
             if (current == null)
             {
@@ -36,13 +54,16 @@ namespace SteuerSoft.Osm.PathFinding.Algorithms
             }
             else if (current == end)
             {
+               
                found = true;
                break;
             }
-
-            visited.Add(current);
+            
+            _visited.Add(current);
          }
 
+         VisitedNodes = _visited.Count;
+         InspectedNodes = _distances.Count;
 
          if (found)
          {
@@ -52,8 +73,8 @@ namespace SteuerSoft.Osm.PathFinding.Algorithms
 
             while (current != start)
             {
-               var next = pres[current];
-               p.Waypoints.Insert(0, pres[current]);
+               var next = _predecessors[current];
+               p.Waypoints.Insert(0, _predecessors[current]);
                current = next;
             }
 
@@ -63,52 +84,53 @@ namespace SteuerSoft.Osm.PathFinding.Algorithms
          return null;
       }
 
-      private void UpdateDistances(Waypoint current, IEnumerable<Waypoint> neighbours, Dictionary<Waypoint, double> distances, Dictionary<Waypoint, Waypoint> pres)
+      private void UpdateDistances(Waypoint current, IEnumerable<Waypoint> neighbours)
       {
-         var currentDist = GetDistance(distances, current);
-
+         double currentDist = GetDistance(current);
          foreach (var neighbour in neighbours)
          {
-            var neighbourDistance = GetDistance(distances, neighbour);
+            var neighbourDistance = GetDistance(neighbour);
             var distToNeighbour = current.DistanceTo(neighbour);
 
             var distSum = currentDist + distToNeighbour;
 
             if (distSum < neighbourDistance)
             {
-               SetDistance(distances, neighbour, distSum);
-               SetPredecessor(pres, neighbour, current);
+               SetDistance(neighbour, distSum);
+               SetPredecessor(neighbour, current);
             }
          }
       }
 
-      private void SetPredecessor(Dictionary<Waypoint, Waypoint> pres, Waypoint wp, Waypoint predecessor)
+      private void SetPredecessor(Waypoint wp, Waypoint predecessor)
       {
-         if (pres.ContainsKey(wp))
+         if (_predecessors.ContainsKey(wp))
          {
-            pres[wp] = predecessor;
+            _predecessors[wp] = predecessor;
          }
          else
          {
-            pres.Add(wp, predecessor);
+            _predecessors.Add(wp, predecessor);
          }
       }
 
-      private void SetDistance(Dictionary<Waypoint, double> distances, Waypoint wp, double distance)
+      private void SetDistance(Waypoint wp, double distance)
       {
-         if (distances.ContainsKey(wp))
+         if (_distances.ContainsKey(wp))
          {
-            distances[wp] = distance;
+            _distances[wp] = distance;
+            _distancesSorted.UpdatePriority(wp, distance);
          }
          else
          {
-            distances.Add(wp, distance);
+            _distances.Add(wp, distance);
+            _distancesSorted.Enqueue(wp, distance);
          }
       }
 
-      private double GetDistance(Dictionary<Waypoint, double> distances, Waypoint wp)
+      private double GetDistance(Waypoint wp)
       {
-         return distances.ContainsKey(wp) ? distances[wp] : double.MaxValue;
+         return _distances.ContainsKey(wp) ? _distances[wp] : double.MaxValue;
       }
    }
 }

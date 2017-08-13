@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9A9ACDE5-3833-40D7-851D-03F9F0FF6FB6}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{0D538985-C059-490F-9FEB-B5CC628F241F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SteuerSoft.Osm</RootNamespace>
-    <AssemblyName>SteuerSoft.Osm</AssemblyName>
+    <RootNamespace>SteuerSoft.Tests.PathFinding</RootNamespace>
+    <AssemblyName>SteuerSoft.Tests.PathFinding</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,10 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Priority Queue, Version=4.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OptimizedPriorityQueue.4.1.1\lib\net45\Priority Queue.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,20 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Material\Base\OsmTaggableBase.cs" />
-    <Compile Include="Material\OsmNode.cs" />
-    <Compile Include="Material\OsmWay.cs" />
-    <Compile Include="Loading\OsmLoader.cs" />
-    <Compile Include="PathFinding\Algorithms\DijkstraAlgorithm.cs" />
-    <Compile Include="PathFinding\Algorithms\Interface\IPathfindingAlgorithm.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StreetNetwork\Material\Connection.cs" />
-    <Compile Include="StreetNetwork\Material\Path.cs" />
-    <Compile Include="StreetNetwork\Material\Waypoint.cs" />
-    <Compile Include="StreetNetwork\OsmStreetSystem.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SteuerSoft.Osm\SteuerSoft.Osm.csproj">
+      <Project>{9a9acde5-3833-40d7-851d-03f9f0ff6fb6}</Project>
+      <Name>SteuerSoft.Osm</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

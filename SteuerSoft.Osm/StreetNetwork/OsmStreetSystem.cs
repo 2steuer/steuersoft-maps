@@ -61,7 +61,8 @@ namespace SteuerSoft.Osm.StreetNetwork
 
          foreach (var way in ways)
          {
-            bool oneWay = way.GetTag("oneway", "no") == "yes";
+            bool oneWay = (way.GetTag("oneway", "no") == "yes")
+               || (way.GetTag("junction", "-") == "roundabout");
 
             Waypoint lastPoint = newSystem.GetWaypointForNode(way.Nodes[0]);
 
