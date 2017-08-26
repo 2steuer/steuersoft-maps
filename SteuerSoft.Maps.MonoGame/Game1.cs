@@ -94,7 +94,7 @@ namespace SteuerSoft.Maps.MonoGame
       {
          Waypoint click = new Waypoint(new OsmNode(1, pos.Lat, pos.Lon));
 
-         Waypoint nearest = _streets.WayPoints.Values.OrderBy(w => w.DistanceTo(click)).First();
+         Waypoint nearest = _streets.Waypoints.Values.OrderBy(w => w.DistanceTo(click)).First();
 
          if (_clickIndex == 0)
          {

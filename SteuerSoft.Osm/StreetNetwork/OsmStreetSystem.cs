@@ -55,7 +55,7 @@ namespace SteuerSoft.Osm.StreetNetwork
 
         private static int _maxSpeed = 130;
 
-        public Dictionary<long, Waypoint> WayPoints { get; private set; } = new Dictionary<long, Waypoint>();
+        public Dictionary<long, Waypoint> Waypoints { get; } = new Dictionary<long, Waypoint>();
 
         private IPathfindingAlgorithm _pathFinder = new DijkstraAlgorithm();
 
@@ -66,14 +66,14 @@ namespace SteuerSoft.Osm.StreetNetwork
 
         private Waypoint GetWaypointForNode(OsmNode node)
         {
-            if (WayPoints.ContainsKey(node.Id))
+            if (Waypoints.ContainsKey(node.Id))
             {
-                return WayPoints[node.Id];
+                return Waypoints[node.Id];
             }
             else
             {
                 Waypoint nw = new Waypoint(node);
-                WayPoints.Add(node.Id, nw);
+                Waypoints.Add(node.Id, nw);
                 return nw;
             }
         }
@@ -233,17 +233,17 @@ namespace SteuerSoft.Osm.StreetNetwork
 
             Waypoint last = wps[(long)wpIds[0]];
 
-            if (!strt.WayPoints.ContainsKey(last.Id))
+            if (!strt.Waypoints.ContainsKey(last.Id))
             {
-                strt.WayPoints.Add(last.Id, last);
+                strt.Waypoints.Add(last.Id, last);
             }
 
             for (int i = 1; i < wpIds.Count; i++)
             {
                 Waypoint current = wps[(long) wpIds[i]];
-                if (!strt.WayPoints.ContainsKey(current.Id))
+                if (!strt.Waypoints.ContainsKey(current.Id))
                 {
-                    strt.WayPoints.Add(current.Id, current);
+                    strt.Waypoints.Add(current.Id, current);
                 }
 
                 last.ConnectTo(current, info);

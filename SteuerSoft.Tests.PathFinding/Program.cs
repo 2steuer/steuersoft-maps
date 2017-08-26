@@ -28,11 +28,11 @@ namespace SteuerSoft.Tests.PathFinding
             {
                 Console.WriteLine("Reading street system directly...");
                 _streets = OsmStreetSystem.FromFile("K:\\OsmData\\map.osm");
-                Console.WriteLine($"Finished. {_streets.WayPoints.Count} waypoints.");   
+                Console.WriteLine($"Finished. {_streets.Waypoints.Count} waypoints.");   
             });
 
-            var start = _streets.WayPoints[259796142];
-            var end = _streets.WayPoints[1876454449];
+            var start = _streets.Waypoints[259796142];
+            var end = _streets.Waypoints[1876454449];
 
             Console.WriteLine();
             Console.WriteLine($"Trying to find path from {start.Id} to {end.Id}");
