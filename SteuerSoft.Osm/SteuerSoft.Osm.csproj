@@ -44,10 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Material\Base\OsmTaggableBase.cs" />
     <Compile Include="Material\OsmNode.cs" />
     <Compile Include="Material\OsmWay.cs" />
     <Compile Include="Loading\OsmLoader.cs" />
+    <Compile Include="PathFinding\Algorithms\AStarAlgorithm.cs" />
     <Compile Include="PathFinding\Algorithms\DijkstraAlgorithm.cs" />
     <Compile Include="PathFinding\Algorithms\Interface\IPathfindingAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

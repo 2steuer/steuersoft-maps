@@ -10,87 +10,95 @@ using SteuerSoft.Osm.StreetNetwork;
 
 namespace SteuerSoft.Tests.PathFinding
 {
-   class Program
-   {
-      private OsmLoader _osm = null;
-      private OsmStreetSystem _streets = null;
+    class Program
+    {
+        private OsmStreetSystem _streets = null;
 
-      Stopwatch _sw = new Stopwatch();
+        Stopwatch _sw = new Stopwatch();
 
-      static void Main(string[] args)
-      {
-         var p = new Program();
-         p.Run();
-      }
+        static void Main(string[] args)
+        {
+            var p = new Program();
+            p.Run();
+        }
 
-      private void Run()
-      {
-         MeasureTime(() =>
-         {
-            Console.WriteLine("Loading map data...");
-            _osm = OsmLoader.Load("K:\\OsmData\\map.osm");
-            Console.WriteLine($"Loaded {_osm.Nodes.Count} nodes and {_osm.Ways.Count} ways.");
-         });
-
-         MeasureTime(() =>
-         {
-            Console.WriteLine("Building street graph...");
-            _streets = OsmStreetSystem.Build(_osm);
-            Console.WriteLine($"Finished. {_streets.WayPoints.Count} Waypoints.");
-         });
-
-         var start = _streets.WayPoints[259796142];
-         var end = _streets.WayPoints[1876454449];
-
-         Console.WriteLine();
-         Console.WriteLine($"Trying to find path from {start.Id} to {end.Id}");
-         Console.WriteLine($"Direct distance: {start.DistanceTo(end):##.000} km");
-
-         Console.WriteLine();
-         Console.WriteLine("Using Dijkstra's allgorithm.");
-         var dijkstra = new DijkstraAlgorithm();
-
-
-         for (int i = 0; i < 3; i++)
-         {
+        private void Run()
+        {
             MeasureTime(() =>
             {
-               Console.WriteLine($"[{i}] Looking for a path in the graph....");
-               var p = dijkstra.FindPath(start, end, (from, to) =>
-               {
-                  double distance = from.DistanceTo(to);
-                  double maxSpeed = from.GetInfoTo(to).MaxSpeed;
-
-                  return distance/maxSpeed;
-               });
-
-               Console.WriteLine($"Finished in {dijkstra.Steps} steps.");
-               Console.WriteLine($"Inspected {dijkstra.InspectedNodes}, visited {dijkstra.VisitedNodes}");
-
-               if (p != null)
-               {
-                  Console.WriteLine($"Found a path. {p.Waypoints.Count} waypoints. {p.Length:##.000} km.");
-               }
-               else
-               {
-                  Console.WriteLine("No path found.");
-               }
-
+                Console.WriteLine("Reading street system directly...");
+                _streets = OsmStreetSystem.FromFile("K:\\OsmData\\map.osm");
+                Console.WriteLine($"Finished. {_streets.WayPoints.Count} waypoints.");   
             });
-         }
-         
 
-         Console.ReadLine();
-      }
+            var start = _streets.WayPoints[259796142];
+            var end = _streets.WayPoints[1876454449];
 
-      private void MeasureTime(Action action)
-      {
-         _sw.Reset();
-         _sw.Start();
-         action();
-         _sw.Stop();
+            Console.WriteLine();
+            Console.WriteLine($"Trying to find path from {start.Id} to {end.Id}");
+            Console.WriteLine($"Direct distance: {start.DistanceTo(end):##.000} km");
 
-         Console.WriteLine($"-- Elapsed time: {_sw.Elapsed}");
-      }
-   }
+            Console.WriteLine();
+            Console.WriteLine("Using Dijkstra's allgorithm.");
+            var dijkstra = new DijkstraAlgorithm();
+            var astar = new AStarAlgorithm();
+
+            Console.WriteLine(" --------- DIJKSTRA ----------");
+
+            for (int i = 0; i < 3; i++)
+            {
+                MeasureTime(() =>
+                {
+                    Console.WriteLine($"[{i}] Looking for a path in the graph....");
+                    var p = dijkstra.FindPath(start, end);
+
+                    Console.WriteLine($"Finished in {dijkstra.Steps} steps.");
+                    Console.WriteLine($"Inspected {dijkstra.InspectedNodes}, visited {dijkstra.VisitedNodes}");
+
+                    if (p != null)
+                    {
+                        Console.WriteLine($"Found a path. {p.Waypoints.Count} waypoints. {p.Length:##.000} km.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No path found.");
+                    }
+                });
+            }
+
+            Console.WriteLine(" --------- A-STAR ----------");
+            for (int i = 0; i < 3; i++)
+            {
+                MeasureTime(() =>
+                {
+                    Console.WriteLine($"[{i}] Looking for a path in the graph....");
+                    var p = astar.FindPath(start, end);
+
+                    Console.WriteLine($"Finished in {astar.Steps} steps.");
+                    Console.WriteLine($"Inspected {astar.InspectedNodes}, visited {astar.VisitedNodes}");
+
+                    if (p != null)
+                    {
+                        Console.WriteLine($"Found a path. {p.Waypoints.Count} waypoints. {p.Length:##.000} km.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No path found.");
+                    }
+                });
+            }
+
+            Console.ReadLine();
+        }
+
+        private void MeasureTime(Action action)
+        {
+            _sw.Reset();
+            _sw.Start();
+            action();
+            _sw.Stop();
+
+            Console.WriteLine($"-- Elapsed time: {_sw.Elapsed}");
+        }
+    }
 }

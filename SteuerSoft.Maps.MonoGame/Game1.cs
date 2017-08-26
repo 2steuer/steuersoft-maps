@@ -75,8 +75,6 @@ namespace SteuerSoft.Maps.MonoGame
          _osm = OsmLoader.Load("K:\\OsmData\\map.osm");
          _streets = OsmStreetSystem.Build(_osm);
 
-         _streets.SetPathFinder(new DijkstraAlgorithm((from, to) => from.DistanceTo(to)/from.GetInfoTo(to).MaxSpeed));
-
          // Create a new SpriteBatch, which can be used to draw textures.
          spriteBatch = new SpriteBatch(GraphicsDevice);
 

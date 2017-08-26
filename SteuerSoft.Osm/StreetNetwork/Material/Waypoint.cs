@@ -7,70 +7,84 @@ using SteuerSoft.Osm.Material;
 
 namespace SteuerSoft.Osm.StreetNetwork.Material
 {
-   public class Waypoint
-   {
-      OsmNode _node;
+    public class Waypoint
+    {
 
-      public long Id => _node.Id;
-      public double Lat => _node.Lat;
-      public double Lon => _node.Lon;
+        public long Id { get; set; }
+        public double Lat { get; set; }
+        public double Lon { get; set; }
 
-      private readonly HashSet<Waypoint> _connections = new HashSet<Waypoint>();
 
-      public IEnumerable<Waypoint> Connections => _connections;
+        private readonly HashSet<Waypoint> _connections = new HashSet<Waypoint>();
 
-      private Dictionary<Waypoint, ConnectionInfo> _connInfos = new Dictionary<Waypoint, ConnectionInfo>();
+        public IEnumerable<Waypoint> Connections => _connections;
 
-      public Waypoint(OsmNode node)
-      {
-         _node = node;
-      }
+        private Dictionary<Waypoint, ConnectionInfo> _connInfos = new Dictionary<Waypoint, ConnectionInfo>();
 
-      public void ConnectTo(Waypoint wp, ConnectionInfo info)
-      {
-         _connections.Add(wp);
-         _connInfos[wp] = info;
-      }
+        public Waypoint(long id, double lat, double lon)
+        {
+            Id = id;
+            Lat = lat;
+            Lon = lon;
+        }
 
-      public ConnectionInfo GetInfoTo(Waypoint wp)
-      {
-         return _connInfos[wp];
-      }
+        public Waypoint(OsmNode node)
+        {
+            Id = node.Id;
+            Lat = node.Lat;
+            Lon = node.Lon;
+        }
 
-      /// <summary>
-      /// Gets the distance to another waypoint in meters.
-      /// 
-      /// Source:
-      /// https://www.codeproject.com/Articles/12269/Distance-between-locations-using-latitude-and-long
-      /// </summary>
-      /// <param name="other"></param>
-      /// <returns>Distance to the other point in meters.</returns>
-      public double DistanceTo(Waypoint other)
-      {
-         double dDistance = Double.MinValue;
-         double dLat1InRad = Lat * (Math.PI / 180.0);
-         double dLong1InRad = Lon * (Math.PI / 180.0);
-         double dLat2InRad = other.Lat * (Math.PI / 180.0);
-         double dLong2InRad = other.Lon * (Math.PI / 180.0);
+        public void ConnectTo(Waypoint wp, ConnectionInfo info)
+        {
+            if (!_connections.Contains(wp) && wp != this)
+            {
+                _connections.Add(wp);
+                _connInfos[wp] = info;
+            }
 
-         double dLongitude = dLong2InRad - dLong1InRad;
-         double dLatitude = dLat2InRad - dLat1InRad;
 
-         // Intermediate result a.
-         double a = Math.Pow(Math.Sin(dLatitude / 2.0), 2.0) +
-                    Math.Cos(dLat1InRad) * Math.Cos(dLat2InRad) *
-                    Math.Pow(Math.Sin(dLongitude / 2.0), 2.0);
+        }
 
-         // Intermediate result c (great circle distance in Radians).
-         double c = 2.0 * Math.Asin(Math.Sqrt(a));
+        public ConnectionInfo GetInfoTo(Waypoint wp)
+        {
+            return _connInfos[wp];
+        }
 
-         // Distance.
-         // const Double kEarthRadiusMiles = 3956.0;
-         const Double kEarthRadiusKms = 6376.5;
-         dDistance = kEarthRadiusKms * c;
+        /// <summary>
+        /// Gets the distance to another waypoint in meters.
+        /// 
+        /// Source:
+        /// https://www.codeproject.com/Articles/12269/Distance-between-locations-using-latitude-and-long
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns>Distance to the other point in meters.</returns>
+        public double DistanceTo(Waypoint other)
+        {
+            double dDistance = Double.MinValue;
+            double dLat1InRad = Lat * (Math.PI / 180.0);
+            double dLong1InRad = Lon * (Math.PI / 180.0);
+            double dLat2InRad = other.Lat * (Math.PI / 180.0);
+            double dLong2InRad = other.Lon * (Math.PI / 180.0);
 
-         return dDistance;
+            double dLongitude = dLong2InRad - dLong1InRad;
+            double dLatitude = dLat2InRad - dLat1InRad;
 
-      }
-   }
+            // Intermediate result a.
+            double a = Math.Pow(Math.Sin(dLatitude / 2.0), 2.0) +
+                       Math.Cos(dLat1InRad) * Math.Cos(dLat2InRad) *
+                       Math.Pow(Math.Sin(dLongitude / 2.0), 2.0);
+
+            // Intermediate result c (great circle distance in Radians).
+            double c = 2.0 * Math.Asin(Math.Sqrt(a));
+
+            // Distance.
+            // const Double kEarthRadiusMiles = 3956.0;
+            const Double kEarthRadiusKms = 6376.5;
+            dDistance = kEarthRadiusKms * c;
+
+            return dDistance;
+
+        }
+    }
 }

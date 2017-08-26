@@ -23,7 +23,7 @@ namespace SteuerSoft.Osm.PathFinding.Algorithms
       public Func<Waypoint, Waypoint, double> CostFunction { get; set; }
 
       public DijkstraAlgorithm()
-         :this((wpstart, wpend) => wpstart.DistanceTo(wpend))
+         :this((wpstart, wpend) => wpstart.DistanceTo(wpend)/wpstart.GetInfoTo(wpend).MaxSpeed)
       {
          
       }
