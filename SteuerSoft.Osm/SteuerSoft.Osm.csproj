@@ -57,9 +57,15 @@
     <Compile Include="StreetNetwork\Material\Path.cs" />
     <Compile Include="StreetNetwork\Material\Waypoint.cs" />
     <Compile Include="StreetNetwork\OsmStreetSystem.cs" />
+    <Compile Include="StreetNetwork\Singleton\Defaults.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NetworkConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

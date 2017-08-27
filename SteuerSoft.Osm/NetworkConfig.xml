@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+  <HighwayFilter>
+    <Entry type="motorway" maxspeed="120" />
+    <Entry type="trunk" maxspeed="100" />
+    <Entry type="primary" maxspeed="100" />
+    <Entry type="secondary" maxspeed="100" />
+    <Entry type="tertiary" maxspeed="50" />
+    <Entry type="unclassified" maxspeed="50" />
+    <Entry type="residential" maxspeed="30" />
+    <Entry type="motorway_link" maxspeed="40" />
+    <Entry type="primary_link" maxspeed="40" />
+    <Entry type="trunk_link" maxspeed="40" />
+    <Entry type="secondary_link" maxspeed="30" />
+    <Entry type="tertiary_link" maxspeed="30" />
+    <Entry type="service" maxspeed="10" />
+  </HighwayFilter>
+  
+  <MaxSpeed value="130" />
+</Config>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SteuerSoft.Osm.Loading;
 using SteuerSoft.Osm.PathFinding.Algorithms;
 using SteuerSoft.Osm.StreetNetwork;
+using SteuerSoft.Osm.StreetNetwork.Singleton;
 
 namespace SteuerSoft.Tests.PathFinding
 {
@@ -24,6 +25,8 @@ namespace SteuerSoft.Tests.PathFinding
 
         private void Run()
         {
+            Defaults.Load();
+
             MeasureTime(() =>
             {
                 Console.WriteLine("Reading street system directly...");

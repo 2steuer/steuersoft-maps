@@ -13,51 +13,17 @@ using SteuerSoft.Osm.Material;
 using SteuerSoft.Osm.PathFinding.Algorithms;
 using SteuerSoft.Osm.PathFinding.Algorithms.Interface;
 using SteuerSoft.Osm.StreetNetwork.Material;
+using SteuerSoft.Osm.StreetNetwork.Singleton;
 using Path = SteuerSoft.Osm.StreetNetwork.Material.Path;
 
 namespace SteuerSoft.Osm.StreetNetwork
 {
     public class OsmStreetSystem
     {
-        private static HashSet<string> _highwayWhitelist = new HashSet<string>( new []
-        {
-         "motorway",
-         "trunk",
-         "primary",
-         "secondary",
-         "tertiary",
-         "unclassified",
-         "residential",
-         "motorway_link",
-         "trunk_link",
-         "primary_link",
-         "secondary_link",
-         "tertiary_link",
-         "service"
-      });
-
-        private static Dictionary<string, string> _defaultMaxSpeeds = new Dictionary<string, string>()
-      {
-         {"motorway", "120"},
-         {"trunk", "100"},
-         {"primary", "100"},
-         {"secondary", "100"},
-         {"tertiary", "50"},
-         {"unclassified", "50"},
-         {"residential", "30"},
-         {"motorway_link", "40"},
-         {"trunk_link", "40"},
-         {"primary_link", "40" },
-         {"secondary_link", "30"},
-         {"tertiary_link", "30"},
-         {"service", "10"}
-      };
-
-        private static int _maxSpeed = 130;
 
         public Dictionary<long, Waypoint> Waypoints { get; } = new Dictionary<long, Waypoint>();
 
-        private IPathfindingAlgorithm _pathFinder = new DijkstraAlgorithm();
+        public IPathfindingAlgorithm Pathfinder { get; set; } = new DijkstraAlgorithm();
 
         private OsmStreetSystem()
         {
@@ -82,7 +48,7 @@ namespace SteuerSoft.Osm.StreetNetwork
         {
             OsmStreetSystem newSystem = new OsmStreetSystem();
 
-            var ways = data.Ways.Values.Where(w => _highwayWhitelist.Contains(w.GetTag("highway", "-")));
+            var ways = data.Ways.Values.Where(w => Defaults.HighwayWhitelist.Contains(w.GetTag("highway", "-")));
 
             foreach (var way in ways)
             {
@@ -113,45 +79,11 @@ namespace SteuerSoft.Osm.StreetNetwork
 
         private static ConnectionInfo MakeConnectionInfo(Dictionary<string, string> tags)
         {
-            ConnectionInfo i = new ConnectionInfo();
-
-            if (!tags.ContainsKey("maxspeed"))
-            {
-                i.MaxSpeed = double.Parse(_defaultMaxSpeeds[tags["highway"]]);
-            }
-            else
-            {
-                var speed = tags["maxspeed"];
-
-                if (speed == "none")
-                {
-                    i.MaxSpeed = _maxSpeed;
-
-                }
-                else
-                {
-                    try
-                    {
-                        i.MaxSpeed = double.Parse(speed);
-                    }
-                    catch (Exception)
-                    {
-                        i.MaxSpeed = double.Parse(_defaultMaxSpeeds[tags["highway"]]);
-                    }
-
-                }
-            }
-
-            return i;
+            return new ConnectionInfo(tags);
         }
 
         private static ConnectionInfo MakeConnectionInfo(OsmWay way)
             => MakeConnectionInfo(way.Tags);
-
-        public void SetPathFinder(IPathfindingAlgorithm finder)
-        {
-            _pathFinder = finder;
-        }
 
         public static OsmStreetSystem FromFile(string file)
         {
@@ -220,8 +152,8 @@ namespace SteuerSoft.Osm.StreetNetwork
                     }
                 }
             }
-            
-            if (!_highwayWhitelist.Contains(tags.Get("highway", "-")))
+
+            if (!Defaults.HighwayWhitelist.Contains(tags.Get("highway", "-")))
             {
                 return;
             }
@@ -240,14 +172,14 @@ namespace SteuerSoft.Osm.StreetNetwork
 
             for (int i = 1; i < wpIds.Count; i++)
             {
-                Waypoint current = wps[(long) wpIds[i]];
+                Waypoint current = wps[(long)wpIds[i]];
                 if (!strt.Waypoints.ContainsKey(current.Id))
                 {
                     strt.Waypoints.Add(current.Id, current);
                 }
 
                 last.ConnectTo(current, info);
-                
+
                 if (!oneWay)
                 {
                     current.ConnectTo(last, info);
@@ -259,7 +191,7 @@ namespace SteuerSoft.Osm.StreetNetwork
 
         public Path FindPath(Waypoint start, Waypoint end)
         {
-            return _pathFinder.FindPath(start, end);
+            return Pathfinder.FindPath(start, end);
         }
 
 
