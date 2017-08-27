@@ -15,6 +15,7 @@ using SteuerSoft.Osm.Material;
 using SteuerSoft.Osm.PathFinding.Algorithms;
 using SteuerSoft.Osm.StreetNetwork;
 using SteuerSoft.Osm.StreetNetwork.Material;
+using SteuerSoft.Osm.StreetNetwork.Singleton;
 
 namespace SteuerSoft.Maps.MonoGame
 {
@@ -72,8 +73,8 @@ namespace SteuerSoft.Maps.MonoGame
       /// </summary>
       protected override void LoadContent()
       {
-         _osm = OsmLoader.Load("K:\\OsmData\\map.osm");
-         _streets = OsmStreetSystem.Build(_osm);
+            Defaults.Load();
+         _streets = OsmStreetSystem.LoadSystem("K:\\OsmData\\schleswig-holstein-latest.sn");
 
          // Create a new SpriteBatch, which can be used to draw textures.
          spriteBatch = new SpriteBatch(GraphicsDevice);

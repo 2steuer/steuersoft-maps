@@ -36,8 +36,8 @@ namespace SteuerSoft.Tests.PathFinding
 
             GC.Collect();
 
-            var start = _streets.Waypoints[259796142];
-            var end = _streets.Waypoints[1876454449];
+            var start = _streets.Waypoints[3444465853];
+            var end = _streets.Waypoints[620793260];
 
             Console.WriteLine();
             Console.WriteLine($"Trying to find path from {start.Id} to {end.Id}");
