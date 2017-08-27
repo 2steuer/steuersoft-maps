@@ -29,10 +29,12 @@ namespace SteuerSoft.Tests.PathFinding
 
             MeasureTime(() =>
             {
-                Console.WriteLine("Reading street system directly...");
-                _streets = OsmStreetSystem.FromFile("K:\\OsmData\\map.osm");
-                Console.WriteLine($"Finished. {_streets.Waypoints.Count} waypoints.");   
+                Console.WriteLine("Reading network file...");
+                _streets = OsmStreetSystem.LoadSystem("K:\\OsmData\\schleswig-holstein-latest.sn");
+                Console.WriteLine("Finished.");
             });
+
+            GC.Collect();
 
             var start = _streets.Waypoints[259796142];
             var end = _streets.Waypoints[1876454449];

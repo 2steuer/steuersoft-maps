@@ -13,6 +13,7 @@ using SteuerSoft.Osm.Material;
 using SteuerSoft.Osm.PathFinding.Algorithms;
 using SteuerSoft.Osm.PathFinding.Algorithms.Interface;
 using SteuerSoft.Osm.StreetNetwork.Material;
+using SteuerSoft.Osm.StreetNetwork.Saving;
 using SteuerSoft.Osm.StreetNetwork.Singleton;
 using Path = SteuerSoft.Osm.StreetNetwork.Material.Path;
 
@@ -85,7 +86,7 @@ namespace SteuerSoft.Osm.StreetNetwork
         private static ConnectionInfo MakeConnectionInfo(OsmWay way)
             => MakeConnectionInfo(way.Tags);
 
-        public static OsmStreetSystem FromFile(string file)
+        public static OsmStreetSystem FromOsmFile(string file)
         {
             Dictionary<long, Waypoint> wps = new Dictionary<long, Waypoint>();
             OsmStreetSystem newSystem = new OsmStreetSystem();
@@ -187,6 +188,168 @@ namespace SteuerSoft.Osm.StreetNetwork
 
                 last = current;
             }
+        }
+
+        public void SaveSystem(string file)
+        {
+            using (var writer = File.Open(file, FileMode.Create))
+            {
+                SaveSystem(writer);
+            }
+        }
+
+        public void SaveSystem(Stream outStream)
+        {
+            Dictionary<ConnectionInfo, long> infos = new Dictionary<ConnectionInfo, long>();
+            List<RelationInfo> relations = new List<RelationInfo>();
+
+            XmlWriterSettings set = new XmlWriterSettings();
+            set.Indent = true;
+
+            using (var wrt = XmlWriter.Create(outStream, set))
+            {
+                wrt.WriteStartDocument();
+                wrt.WriteStartElement("System");
+                // Write all waypoints with their IDs and save the 
+                // info and relation information
+                foreach (var waypoint in Waypoints.Values)
+                {
+                    WriteWaypoint(wrt, waypoint);
+
+                    foreach (var connection in waypoint.Connections)
+                    {
+                        var i = waypoint.GetInfoTo(connection);
+
+                        if (!infos.ContainsKey(i))
+                        {
+                            infos.Add(i, infos.Count);
+                        }
+
+                        relations.Add(new RelationInfo()
+                        {
+                            Start = waypoint.Id,
+                            End = connection.Id,
+                            Info = infos[i]
+                        });
+                    }
+                }
+
+                // Write all connection infos
+                foreach (var l in infos)
+                {
+                    WriteConnectionInfo(wrt, l.Key, l.Value);
+                }
+
+                // Write all relations
+                foreach (var relation in relations)
+                {
+                    wrt.WriteStartElement("rel");
+                    wrt.WriteAttributeString("start", relation.Start.ToString());
+                    wrt.WriteAttributeString("end", relation.End.ToString());
+                    wrt.WriteAttributeString("ci", relation.Info.ToString());
+                    wrt.WriteEndElement();
+                }
+
+                wrt.WriteEndElement();
+            }
+        }
+
+        public static OsmStreetSystem LoadSystem(string filename)
+        {
+            using (var str = File.Open(filename, FileMode.Open))
+            {
+                return LoadSystem(str);
+            }
+        }
+
+        public static OsmStreetSystem LoadSystem(Stream str)
+        {
+            OsmStreetSystem newSys = new OsmStreetSystem();
+
+            Dictionary<long, ConnectionInfo> infos = new Dictionary<long, ConnectionInfo>();
+
+            using (var rd = XmlReader.Create(str))
+            {
+                while (rd.Read())
+                {
+                    if (rd.NodeType != XmlNodeType.Element)
+                    {
+                        continue;
+                    }
+
+                    switch (rd.Name)
+                    {
+                        case "wp":
+                            var wp = ParseWaypoint(rd);
+                            newSys.Waypoints.Add(wp.Id, wp);
+                            break;
+
+                        case "ci":
+                            var id = ReadInfoId(rd);
+                            infos.Add(id, ReadInfo(rd));
+                            break;
+
+                        case "rel":
+                            long start = long.Parse(rd.GetAttribute("start"));
+                            long end = long.Parse(rd.GetAttribute("end"));
+                            long ci = long.Parse(rd.GetAttribute("ci"));
+
+                            newSys.Waypoints[start].ConnectTo(newSys.Waypoints[end], infos[ci]);
+                            break;
+                    }
+                }
+            }
+
+            return newSys;
+        }
+
+        private void WriteWaypoint(XmlWriter wrt, Waypoint wp)
+        {
+            wrt.WriteStartElement("wp");
+            wrt.WriteAttributeString("id", wp.Id.ToString());
+            wrt.WriteAttributeString("lat", wp.Lat.ToString(CultureInfo.InvariantCulture));
+            wrt.WriteAttributeString("lon", wp.Lon.ToString(CultureInfo.InvariantCulture));
+            wrt.WriteEndElement();
+        }
+
+        private void WriteConnectionInfo(XmlWriter wrt, ConnectionInfo i, long id)
+        {
+            wrt.WriteStartElement("ci");
+            wrt.WriteAttributeString("id", id.ToString());
+
+            foreach (var tag in i.Tags)
+            {
+                wrt.WriteStartElement("tag");
+                wrt.WriteAttributeString("k", tag.Key);
+                wrt.WriteAttributeString("v", tag.Value);
+                wrt.WriteEndElement();
+            }
+
+            wrt.WriteEndElement();
+        }
+
+        private static long ReadInfoId(XmlReader rd)
+        {
+            return long.Parse(rd.GetAttribute("id"));
+        }
+
+        private static ConnectionInfo ReadInfo(XmlReader rd)
+        {
+            ConnectionInfo i = new ConnectionInfo();
+
+            if (!rd.IsEmptyElement)
+            {
+                while (rd.Read() && rd.NodeType != XmlNodeType.EndElement)
+                {
+                    if (rd.Name == "tag")
+                    {
+                        i.Tags.Add(rd.GetAttribute("k"), rd.GetAttribute("v"));
+                    }
+                }
+            }
+
+            i.ParseTags();
+            return i;
         }
 
         public Path FindPath(Waypoint start, Waypoint end)

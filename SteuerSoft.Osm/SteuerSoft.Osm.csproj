@@ -57,6 +57,7 @@
     <Compile Include="StreetNetwork\Material\Path.cs" />
     <Compile Include="StreetNetwork\Material\Waypoint.cs" />
     <Compile Include="StreetNetwork\OsmStreetSystem.cs" />
+    <Compile Include="StreetNetwork\Saving\RelationInfo.cs" />
     <Compile Include="StreetNetwork\Singleton\Defaults.cs" />
   </ItemGroup>
   <ItemGroup>
