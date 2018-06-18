@@ -105,6 +105,12 @@ namespace SteuerSoft.Maps.Controls.MonoGame
 
       private Dictionary<MapPath, Color> _pathColors = new Dictionary<MapPath, Color>();
       private Dictionary<MapPath, MapLayer> _pathLayers = new Dictionary<MapPath, MapLayer>();
+      
+        public MapRectangle ViewBounds
+        {
+            get { return _map.ViewBounds; }
+            set { _map.ViewBounds = value; }
+        }
 
       /// <summary>
       /// Initialises a new instance of the MapControl class.
@@ -341,9 +347,9 @@ namespace SteuerSoft.Maps.Controls.MonoGame
       /// It is called quite a lot of times, the delta of two calls may be calculated out of the passed GameTime parameter.
       /// </summary>
       /// <param name="time">The time passed since the game started.</param>
-      public void Update(GameTime time)
+      public void Update(GameTime time, MouseState mouseState, KeyboardState keyboardState)
       {
-         MouseState currentState = Mouse.GetState();
+         MouseState currentState = mouseState;
 
          MapVector mousePos = new MapVector() {X = currentState.X, Y = currentState.Y};
 
