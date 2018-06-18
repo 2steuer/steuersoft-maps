@@ -147,7 +147,7 @@ namespace SteuerSoft.Maps.MonoGame
          if (!IsActive)
             return;
 
-         _map.Update(gameTime);
+         _map.Update(gameTime, Mouse.GetState(), Keyboard.GetState());
 
          base.Update(gameTime);
       }
