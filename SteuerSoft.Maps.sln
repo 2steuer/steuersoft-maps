@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps", "SteuerSoft.Maps\SteuerSoft.Maps.csproj", "{DB332FD5-A677-48B4-AEDF-2FE6885B6858}"
 EndProject
@@ -18,6 +18,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps.Controls.MonoGame", "SteuerSoft.Maps.Controls.MonoGame\SteuerSoft.Maps.Controls.MonoGame.csproj", "{6DC6D8C3-61A2-41E4-9206-B110DF7BD66B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Tests.PathFinding", "SteuerSoft.Tests.PathFinding\SteuerSoft.Tests.PathFinding.csproj", "{0D538985-C059-490F-9FEB-B5CC628F241F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps.Wpf", "SteuerSoft.Maps.Wpf\SteuerSoft.Maps.Wpf.csproj", "{EF72620A-0D76-4C90-8266-F92CFE1B04FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lage", "Lage", "{49EB54C3-655D-49BB-8F73-7CCAB858E2B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Lage", "SteuerSoft.Lage\SteuerSoft.Lage.csproj", "{61558CB0-8B74-41CF-9D5C-87F9E015A28D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,8 +80,30 @@ Global
 		{0D538985-C059-490F-9FEB-B5CC628F241F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0D538985-C059-490F-9FEB-B5CC628F241F}.Release|x86.ActiveCfg = Release|Any CPU
 		{0D538985-C059-490F-9FEB-B5CC628F241F}.Release|x86.Build.0 = Release|Any CPU
+		{EF72620A-0D76-4C90-8266-F92CFE1B04FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF72620A-0D76-4C90-8266-F92CFE1B04FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF72620A-0D76-4C90-8266-F92CFE1B04FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EF72620A-0D76-4C90-8266-F92CFE1B04FF}.Debug|x86.Build.0 = Debug|Any CPU
+		{EF72620A-0D76-4C90-8266-F92CFE1B04FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF72620A-0D76-4C90-8266-F92CFE1B04FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF72620A-0D76-4C90-8266-F92CFE1B04FF}.Release|x86.ActiveCfg = Release|Any CPU
+		{EF72620A-0D76-4C90-8266-F92CFE1B04FF}.Release|x86.Build.0 = Release|Any CPU
+		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Debug|x86.Build.0 = Debug|Any CPU
+		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Release|x86.ActiveCfg = Release|Any CPU
+		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{61558CB0-8B74-41CF-9D5C-87F9E015A28D} = {49EB54C3-655D-49BB-8F73-7CCAB858E2B2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {51DECF4D-49DB-47F5-A358-E4D70EC0EDA3}
 	EndGlobalSection
 EndGlobal

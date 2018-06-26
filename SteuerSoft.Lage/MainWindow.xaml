@@ -1,0 +1,47 @@
+﻿<Window x:Class="SteuerSoft.Lage.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:wpf="clr-namespace:SteuerSoft.Maps.Wpf;assembly=SteuerSoft.Maps.Wpf"
+        xmlns:material="clr-namespace:SteuerSoft.Maps.Core.Material;assembly=SteuerSoft.Maps.Core"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <xcad:VS2010Theme x:Key="Theme" />
+        <material:MapPointLatLon Lat="53.83066" Lon="10.49847" x:Key="StartPoint"/>
+    </Window.Resources>
+    <DockPanel>
+
+   <xcad:DockingManager 
+                           AllowMixedOrientation="True"
+                           BorderBrush="Black"
+                           BorderThickness="1"
+                           Theme="{StaticResource Theme}" Name="_docking">
+       <xcad:DockingManager.DocumentHeaderTemplate><DataTemplate>
+           <TextBlock Text="{Binding Title}" />
+       </DataTemplate></xcad:DockingManager.DocumentHeaderTemplate>     
+       <xcad:LayoutRoot x:Name="_layoutRoot">
+                
+
+                <xcad:LayoutPanel Orientation="Horizontal">
+                    <xcad:LayoutDocumentPaneGroup>
+                        <xcad:LayoutDocumentPane>
+                            <xcad:LayoutDocument ContentId="document1" Title="Document 1">
+                                <wpf:Map />
+                            </xcad:LayoutDocument>
+                            <xcad:LayoutDocument ContentId="document2" Title="Document 2" >
+                                <wpf:Map MapPosition="{StaticResource StartPoint}" Zoom="14"/>
+                            </xcad:LayoutDocument>
+                        </xcad:LayoutDocumentPane>
+                    </xcad:LayoutDocumentPaneGroup >
+                    <xcad:LayoutAnchorablePaneGroup Orientation="Horizontal" DockWidth="100">
+                    </xcad:LayoutAnchorablePaneGroup>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+    </DockPanel>
+</Window>
