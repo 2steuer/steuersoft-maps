@@ -6,5 +6,5 @@
              xmlns:local="clr-namespace:SteuerSoft.Maps.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <local:MapGame x:Name="Scene" DisplayInitialized="Scene_OnInitialized"/>
+    <local:MapGame x:Name="Scene" DisplayInitialized="Scene_OnInitialized" />
 </UserControl>

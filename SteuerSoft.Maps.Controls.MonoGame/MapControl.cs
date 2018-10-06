@@ -17,6 +17,10 @@ namespace SteuerSoft.Maps.Controls.MonoGame
 {
     public delegate void MouseClickDelegate(object sender, MapPointLatLon pos);
 
+    public delegate void MapMovedDelegate(object sender, MapPointLatLon newPosition);
+
+    public delegate void MapZoomedDelegate(object sender, int newZoom);
+
     /// <summary>
     /// A MapControl that shall be drawn within a MonoGame game window.
     /// </summary>
@@ -98,6 +102,16 @@ namespace SteuerSoft.Maps.Controls.MonoGame
         public bool CanMove { get; set; } = true;
 
         /// <summary>
+        /// Event raised when the user dragged the map.
+        /// </summary>
+        public event MapMovedDelegate OnMoved;
+
+        /// <summary>
+        /// Event raised when the user has zoomed the map using the mouse wheel.
+        /// </summary>
+        public event MapZoomedDelegate OnZoomed;
+
+        /// <summary>
         /// Represents the last mouse state.
         /// Is overwritten in every Update() call with the current mouse state.
         /// </summary>
@@ -156,7 +170,7 @@ namespace SteuerSoft.Maps.Controls.MonoGame
         public void Draw(GameTime time)
         {
             _sBatch.Begin();
-
+            
             foreach (var tile in _map.GetDrawTiles())
             {
                 DrawTile(tile.Tile, tile.SourceRectangle.ToRectangle(), tile.DestinationRectangle.ToRectangle());
@@ -181,6 +195,7 @@ namespace SteuerSoft.Maps.Controls.MonoGame
                     DrawPolygon(polygon);
                 }
             }
+
 
             _sBatch.End();
         }
@@ -317,7 +332,7 @@ namespace SteuerSoft.Maps.Controls.MonoGame
         {
             // Draw top line
             _sBatch.Draw(_pixel, new Rectangle(rectangleToDraw.X, rectangleToDraw.Y, rectangleToDraw.Width, thicknessOfBorder), borderColor);
-
+            
             // Draw left line
             _sBatch.Draw(_pixel, new Rectangle(rectangleToDraw.X, rectangleToDraw.Y, thicknessOfBorder, rectangleToDraw.Height), borderColor);
 
@@ -384,6 +399,8 @@ namespace SteuerSoft.Maps.Controls.MonoGame
                 MapPointLatLon newCenterGeoPoint = _map.MapPointToLatLon(newCenterMapVector);
 
                 _map.Position = newCenterGeoPoint;
+
+                OnMoved?.Invoke(this, _map.Position);
             }
 
             int wheel = _oldMouseState.ScrollWheelValue - currentState.ScrollWheelValue;
@@ -423,6 +440,8 @@ namespace SteuerSoft.Maps.Controls.MonoGame
                         SetZoomMouse(newZoom, viewPos);
                         break;
                 }
+
+                OnZoomed?.Invoke(this, _map.Zoom);
             }
 
             if ((_oldMouseState.LeftButton == ButtonState.Pressed) && currentState.LeftButton == ButtonState.Released)

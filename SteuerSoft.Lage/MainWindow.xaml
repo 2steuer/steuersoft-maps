@@ -7,38 +7,67 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:wpf="clr-namespace:SteuerSoft.Maps.Wpf;assembly=SteuerSoft.Maps.Wpf"
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         xmlns:material="clr-namespace:SteuerSoft.Maps.Core.Material;assembly=SteuerSoft.Maps.Core"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
-        <xcad:VS2010Theme x:Key="Theme" />
-        <material:MapPointLatLon Lat="53.83066" Lon="10.49847" x:Key="StartPoint"/>
+        <ResourceDictionary>
+            <xcad:VS2010Theme x:Key="Theme" />
+            <material:MapPointLatLon Lat="53.83066" Lon="10.49847" x:Key="StartPoint"/>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/DocumentTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
+
     <DockPanel>
+    
+        <Menu DockPanel.Dock="Top" Height="Auto">
+            <MenuItem Header="Reinfeld" Click="MenuItem_OnClick"/>
+            <MenuItem Header="Break" Click="BreakItemClick"></MenuItem>
+        </Menu>
 
    <xcad:DockingManager 
                            AllowMixedOrientation="True"
                            BorderBrush="Black"
                            BorderThickness="1"
-                           Theme="{StaticResource Theme}" Name="_docking">
-       <xcad:DockingManager.DocumentHeaderTemplate><DataTemplate>
-           <TextBlock Text="{Binding Title}" />
-       </DataTemplate></xcad:DockingManager.DocumentHeaderTemplate>     
-       <xcad:LayoutRoot x:Name="_layoutRoot">
+                           Theme="{StaticResource Theme}" Name="_docking" LayoutItemTemplateSelector="{StaticResource DocumentTemplates}">
+       <xcad:DockingManager.DocumentHeaderTemplate>
+           <DataTemplate>
+           <TextBlock Text="{Binding Path=Content.Title}" />
+           </DataTemplate>
+       </xcad:DockingManager.DocumentHeaderTemplate>   
+       <xcad:DockingManager.AnchorableTitleTemplate>
+           <DataTemplate>
+               <StackPanel Orientation="Horizontal">
+                   <TextBlock Text="{Binding Path=Content.Title,diag:PresentationTraceSources.TraceLevel=High}" />
+                </StackPanel>     
+           </DataTemplate>
+       </xcad:DockingManager.AnchorableTitleTemplate>
+       <xcad:DockingManager.AnchorableHeaderTemplate>
+           <DataTemplate>
+               <StackPanel Orientation="Horizontal">
+                   <TextBlock Text="{Binding Path=Content.Title,diag:PresentationTraceSources.TraceLevel=High}" />
+               </StackPanel>
+           </DataTemplate>
+       </xcad:DockingManager.AnchorableHeaderTemplate>
+
+            <xcad:LayoutRoot x:Name="_layoutRoot">
                 
 
                 <xcad:LayoutPanel Orientation="Horizontal">
+                    <xcad:LayoutAnchorablePane x:Name="TestPane" DockWidth="100">
+                        
+                    </xcad:LayoutAnchorablePane>
                     <xcad:LayoutDocumentPaneGroup>
                         <xcad:LayoutDocumentPane>
-                            <xcad:LayoutDocument ContentId="document1" Title="Document 1">
-                                <wpf:Map />
-                            </xcad:LayoutDocument>
-                            <xcad:LayoutDocument ContentId="document2" Title="Document 2" >
-                                <wpf:Map MapPosition="{StaticResource StartPoint}" Zoom="14"/>
-                            </xcad:LayoutDocument>
                         </xcad:LayoutDocumentPane>
                     </xcad:LayoutDocumentPaneGroup >
                     <xcad:LayoutAnchorablePaneGroup Orientation="Horizontal" DockWidth="100">
+                        <xcad:LayoutAnchorablePane>
+                        </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>
                 </xcad:LayoutPanel>
             </xcad:LayoutRoot>

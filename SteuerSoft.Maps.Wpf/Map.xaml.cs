@@ -26,7 +26,7 @@ namespace SteuerSoft.Maps.Wpf
     public partial class Map : UserControl
     {
         public static readonly DependencyProperty MapPositionProperty = DependencyProperty.Register(
-            "MapPosition", typeof(MapPointLatLon), typeof(MapGame), new PropertyMetadata(default(MapPointLatLon), PositionChangedEvent));
+            "MapPosition", typeof(MapPointLatLon), typeof(Map), new PropertyMetadata(default(MapPointLatLon), PositionChangedEvent));
 
         public MapPointLatLon MapPosition
         {
@@ -35,7 +35,7 @@ namespace SteuerSoft.Maps.Wpf
         }
 
         public static readonly DependencyProperty ZoomProperty = DependencyProperty.Register(
-            "Zoom", typeof(int), typeof(MapGame), new PropertyMetadata(1, ZoomChangedEvent));
+            "Zoom", typeof(int), typeof(Map), new PropertyMetadata(1, ZoomChangedEvent));
 
         public int Zoom
         {
@@ -44,7 +44,7 @@ namespace SteuerSoft.Maps.Wpf
         }
 
         public static readonly DependencyProperty ZoomingTypeProperty = DependencyProperty.Register(
-            "ZoomingType", typeof(ZoomingType), typeof(MapGame), new PropertyMetadata(ZoomingType.Center, ZoomingTypeChangedEvent));
+            "ZoomingType", typeof(ZoomingType), typeof(Map), new PropertyMetadata(ZoomingType.Center, ZoomingTypeChangedEvent));
 
         public ZoomingType ZoomingType
         {
@@ -91,45 +91,76 @@ namespace SteuerSoft.Maps.Wpf
         public Map()
         {
             InitializeComponent();
+
+            
         }
 
         private static void PositionChangedEvent(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            (dependencyObject as Map).Scene.Map.Position =
-                (MapPointLatLon)e.NewValue;
+            var m = (dependencyObject as Map).Scene.Map;
+
+            if (m != null)
+            {
+                m.Position = (MapPointLatLon)e.NewValue;
+            }
         }
 
         private static void ZoomChangedEvent(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            (dependencyObject as Map).Scene.Map.Zoom =
-                (int)e.NewValue;
+            var m = (dependencyObject as Map).Scene.Map;
+
+            if (m != null)
+            {
+                m.Zoom = (int)e.NewValue;
+            }
         }
 
         private static void ZoomingTypeChangedEvent(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            (dependencyObject as Map).Scene.Map.ZoomMode =
-                (ZoomingType)e.NewValue;
+            var m = (dependencyObject as Map).Scene.Map;
+            if (m != null)
+            {
+                m.ZoomMode =
+                    (ZoomingType)e.NewValue;
+
+            }
         }
 
         private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            (dependencyObject as Map).Scene.Map.DrawMiddleCross = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            var m = (dependencyObject as Map).Scene.Map;
+            if (m != null)
+            {
+                m.DrawMiddleCross = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            }
         }
 
         private static void TileBordersChangedCallbackl(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            (dependencyObject as Map).Scene.Map.DrawTileBorders = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            var m = (dependencyObject as Map).Scene.Map;
+            if (m != null)
+            {
+                m.DrawTileBorders = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            }
         }
 
         private static void CanZoomChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            (dependencyObject as Map).Scene.Map.CanZoom = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            var m = (dependencyObject as Map).Scene.Map;
+            if (m != null)
+            {
+                m.CanZoom = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            }
         }
 
 
         private static void CanMoveChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            (dependencyObject as Map).Scene.Map.CanMove = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            var m = (dependencyObject as Map).Scene.Map;
+            if (m != null)
+            {
+                m.CanMove = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            }
         }
 
 
@@ -143,6 +174,19 @@ namespace SteuerSoft.Maps.Wpf
             map.DrawTileBorders = TileBorders;
             map.CanMove = CanMove;
             map.CanZoom = CanZoom;
+
+            map.OnZoomed += Map_OnZoomed;
+            map.OnMoved += Map_OnMoved;
+        }
+
+        private void Map_OnMoved(object sender, MapPointLatLon newPosition)
+        {
+            MapPosition = newPosition;
+        }
+
+        private void Map_OnZoomed(object sender, int newZoom)
+        {
+            Zoom = newZoom;
         }
     }
 }
