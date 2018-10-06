@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using SteuerSoft.Maps.Caching;
 using SteuerSoft.Maps.Controls.MonoGame.MapExtensions;
+using SteuerSoft.Maps.Controls.MonoGame.Markers;
+using SteuerSoft.Maps.Controls.MonoGame.Markers.Interface;
+using SteuerSoft.Maps.Controls.MonoGame.Properties;
 using SteuerSoft.Maps.Controls.MonoGame.ValueTypes;
 using SteuerSoft.Maps.Core.Material;
 using SteuerSoft.Maps.Core.Material.Elements.Layers;
@@ -46,7 +52,7 @@ namespace SteuerSoft.Maps.Controls.MonoGame
         /// <summary>
         /// Currently loaded tiles.
         /// </summary>
-        Dictionary<TileDescriptor, Texture2D> _tiles = new Dictionary<TileDescriptor, Texture2D>();
+        private Dictionary<TileDescriptor, Texture2D> _tiles = new Dictionary<TileDescriptor, Texture2D>();
 
         /// <summary>
         /// The loaded tiles in order of loading. To remove tiles that were not used for a while.
@@ -56,7 +62,17 @@ namespace SteuerSoft.Maps.Controls.MonoGame
         /// <summary>
         /// For Lines and Rectangles drawing. Just a pixel.
         /// </summary>
-        Texture2D _pixel;
+        private Texture2D _pixel;
+
+        /// <summary>
+        /// Cache for the marker textures
+        /// </summary>
+        private Dictionary<string, Texture2D> _markerTextures = new Dictionary<string, Texture2D>();
+
+        /// <summary>
+        /// Current map markers
+        /// </summary>
+        public List<IMapMarker> Markers { get; } = new List<IMapMarker>();
 
         /// <summary>
         /// If true, a border is drawn around each Tile. For Debugging purposes.
@@ -156,6 +172,7 @@ namespace SteuerSoft.Maps.Controls.MonoGame
 
             _map.ViewBounds = bounds;
 
+
             // Somewhere in your LoadContent() method:
             // Set the pixel texture.
             _pixel = new Texture2D(_device, 1, 1, false, SurfaceFormat.Color);
@@ -196,8 +213,47 @@ namespace SteuerSoft.Maps.Controls.MonoGame
                 }
             }
 
+            foreach (IMapMarker marker in Markers)
+            {
+                HandleMarker(marker);   
+            }
 
             _sBatch.End();
+        }
+
+        private void HandleMarker(IMapMarker marker)
+        {
+            if (!_markerTextures.ContainsKey(marker.TextureIdentifier))
+            {
+                using (var str = marker.GetImage())
+                {
+                    _markerTextures.Add(marker.TextureIdentifier, Texture2D.FromStream(_device, str));
+                }
+            }
+
+            if (!marker.Visible)
+            {
+                return;
+            }
+
+            var vp = _map.LatLonToViewPoint(marker.Position);
+            vp -= marker.Offset;
+
+            var rect = new MapRectangle((int)Math.Round(vp.X), (int)Math.Round(vp.Y), marker.Size.Width, marker.Size.Height);
+
+            // Check if a part of the thing is drawn at all...
+            if (rect.X < -(rect.Width)
+                || rect.Y < -(rect.Height)
+                || rect.X > ViewBounds.X + ViewBounds.Width
+                || rect.Y > ViewBounds.Y + ViewBounds.Height)
+            {
+                return;
+            }
+
+            var srcRect = _map.GetSourceRectangle(rect);
+            var destRect = _map.GetDestRectangle(rect);
+
+            _sBatch.Draw(_markerTextures[marker.TextureIdentifier], destRect.ToRectangle(), srcRect.ToRectangle(), Color.White);
         }
 
         private void DrawPath(MapPath path, bool close = false)
@@ -375,10 +431,23 @@ namespace SteuerSoft.Maps.Controls.MonoGame
         /// <param name="time">The time passed since the game started.</param>
         public void Update(GameTime time, MouseState mouseState, KeyboardState keyboardState)
         {
+            // Clean up icon texture cache...
+            var keys = _markerTextures.Keys;
+
+            foreach (string key in keys)
+            {
+                if (Markers.All(m => m.TextureIdentifier != key))
+                {
+                    _markerTextures[key].Dispose();
+                    _markerTextures.Remove(key);
+                }
+            }
+
+            // drag&drop handling
             MouseState currentState = mouseState;
 
             MapVector mousePos = new MapVector() { X = currentState.X, Y = currentState.Y };
-
+            
             if (_dragging && CanMove)
             {
                 MapVector oldVector = new MapVector() { X = _oldMouseState.X, Y = _oldMouseState.Y };
@@ -446,6 +515,7 @@ namespace SteuerSoft.Maps.Controls.MonoGame
 
             if ((_oldMouseState.LeftButton == ButtonState.Pressed) && currentState.LeftButton == ButtonState.Released)
             {
+                Mouse.SetCursor(MouseCursor.Arrow);
                 // Mouse up
                 _dragging = false;
             }

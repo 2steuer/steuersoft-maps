@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,8 +54,14 @@
     <Compile Include="MapControl.cs" />
     <Compile Include="MapExtensions\MapExtensions.cs" />
     <Compile Include="Markers\Base\IconMarkerBase.cs" />
-    <Compile Include="Markers\Interface\IIconMarker.cs" />
+    <Compile Include="Markers\CarMarker.cs" />
+    <Compile Include="Markers\Interface\IMapMarker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Icons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Icons.resx</DependentUpon>
+    </Compile>
     <Compile Include="ValueTypes\ZoomingType.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +81,15 @@
       <Project>{db332fd5-a677-48b4-aedf-2fe6885b6858}</Project>
       <Name>SteuerSoft.Maps</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Icons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\car.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

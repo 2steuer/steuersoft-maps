@@ -447,7 +447,7 @@ namespace SteuerSoft.Maps
       /// </summary>
       /// <param name="srcRect">The rectangle of the viewport as described above.</param>
       /// <returns>The rectangle describing the portion of the tile being rendered.</returns>
-      private MapRectangle GetSourceRectangle(MapRectangle srcRect)
+      public MapRectangle GetSourceRectangle(MapRectangle srcRect)
       {
          MapRectangle newRect = new MapRectangle();
 
@@ -494,7 +494,7 @@ namespace SteuerSoft.Maps
       /// </summary>
       /// <param name="origRect">A rectangle of the viewport as described above.</param>
       /// <returns>The part of the ViewBounds where the tile will be rendered to.</returns>
-      private MapRectangle GetDestRectangle(MapRectangle origRect)
+      public MapRectangle GetDestRectangle(MapRectangle origRect)
       {
          MapRectangle newRect = new MapRectangle();
 

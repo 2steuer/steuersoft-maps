@@ -8,12 +8,12 @@ using SteuerSoft.Maps.Core.Material.Elements.Polygon;
 
 namespace SteuerSoft.Maps.Core.Material.Elements.Layers
 {
-   public class MapLayer
-   {
-      public string Name { get; set; }
-      public bool Visible { get; set; }
+    public class MapLayer
+    {
+        public string Name { get; set; }
+        public bool Visible { get; set; }
 
-      public List<MapPath> Paths { get; } = new List<MapPath>();
-      public List<MapPolygon> Polygons { get; } = new List<MapPolygon>();
-   }
+        public List<MapPath> Paths { get; } = new List<MapPath>();
+        public List<MapPolygon> Polygons { get; } = new List<MapPolygon>();
+    }
 }
