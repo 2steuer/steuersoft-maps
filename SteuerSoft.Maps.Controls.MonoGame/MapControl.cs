@@ -11,8 +11,10 @@ using SteuerSoft.Maps.Caching;
 using SteuerSoft.Maps.Controls.MonoGame.MapExtensions;
 using SteuerSoft.Maps.Controls.MonoGame.Markers;
 using SteuerSoft.Maps.Controls.MonoGame.Markers.Interface;
+using SteuerSoft.Maps.Controls.MonoGame.Material;
 using SteuerSoft.Maps.Controls.MonoGame.Properties;
 using SteuerSoft.Maps.Controls.MonoGame.ValueTypes;
+using SteuerSoft.Maps.Core.Interfaces;
 using SteuerSoft.Maps.Core.Material;
 using SteuerSoft.Maps.Core.Material.Elements.Layers;
 using SteuerSoft.Maps.Core.Material.Elements.Path;
@@ -73,6 +75,15 @@ namespace SteuerSoft.Maps.Controls.MonoGame
         /// Current map markers
         /// </summary>
         public List<IMapMarker> Markers { get; } = new List<IMapMarker>();
+
+        /// <summary>
+        /// Gets or sets the current map provider of a map
+        /// </summary>
+        public IMapProvider Provider
+        {
+            get { return _map.Provider;}
+            set { _map.Provider = value; }
+        }
 
         /// <summary>
         /// If true, a border is drawn around each Tile. For Debugging purposes.
@@ -429,7 +440,7 @@ namespace SteuerSoft.Maps.Controls.MonoGame
         /// It is called quite a lot of times, the delta of two calls may be calculated out of the passed GameTime parameter.
         /// </summary>
         /// <param name="time">The time passed since the game started.</param>
-        public void Update(GameTime time, MouseState mouseState, KeyboardState keyboardState)
+        public void Update(GameTime time, InputArgs input)
         {
             // Clean up icon texture cache...
             var keys = _markerTextures.Keys;
@@ -444,7 +455,7 @@ namespace SteuerSoft.Maps.Controls.MonoGame
             }
 
             // drag&drop handling
-            MouseState currentState = mouseState;
+            MouseState currentState = input.MouseState;
 
             MapVector mousePos = new MapVector() { X = currentState.X, Y = currentState.Y };
             
@@ -515,7 +526,6 @@ namespace SteuerSoft.Maps.Controls.MonoGame
 
             if ((_oldMouseState.LeftButton == ButtonState.Pressed) && currentState.LeftButton == ButtonState.Released)
             {
-                Mouse.SetCursor(MouseCursor.Arrow);
                 // Mouse up
                 _dragging = false;
             }

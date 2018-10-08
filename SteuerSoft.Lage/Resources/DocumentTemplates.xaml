@@ -10,7 +10,7 @@
         <util:TemplateSelector.Templates>
             <DataTemplate x:Key="{x:Type viewModels:MapViewModel}">
                 <wpf:Map MapPosition="{Binding ViewPosition, Mode=TwoWay}" Zoom="{Binding Zoom, Mode=TwoWay}" ZoomingType="{Binding ZoomMode}" CanZoom="{Binding CanZoom}" CanMove="{Binding CanMove}"
-                         MiddleCross="{Binding DrawCross}" TileBorders="False"/>
+                         MiddleCross="{Binding DrawCross}" Provider="{Binding Provider}" TileBorders="False"/>
             </DataTemplate>
             <DataTemplate x:Key="{x:Type viewModels:TestToolViewModel}">
                 <StackPanel Orientation="Vertical">

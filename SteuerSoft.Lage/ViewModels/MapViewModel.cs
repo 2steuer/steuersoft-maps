@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SteuerSoft.Lage.ViewModels.Base;
 using SteuerSoft.Maps.Controls.MonoGame.ValueTypes;
+using SteuerSoft.Maps.Core.Interfaces;
 using SteuerSoft.Maps.Core.Material;
+using SteuerSoft.Maps.Providers;
 
 namespace SteuerSoft.Lage.ViewModels
 {
@@ -19,5 +21,6 @@ namespace SteuerSoft.Lage.ViewModels
         public int Zoom { get; set; } = 1;
         public bool DrawCross { get; set; } = false;
         public bool DrawTileBorders { get; set; } = false;
+        public IMapProvider Provider { get; set; } = GermanOsmProvider.GetInstance();
     }
 }

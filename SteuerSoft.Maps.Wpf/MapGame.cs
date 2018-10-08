@@ -11,6 +11,7 @@ using MonoGame.Framework.WpfInterop;
 using MonoGame.Framework.WpfInterop.Input;
 using SteuerSoft.Maps.Controls.MonoGame;
 using SteuerSoft.Maps.Controls.MonoGame.MapExtensions;
+using SteuerSoft.Maps.Controls.MonoGame.Material;
 using SteuerSoft.Maps.Controls.MonoGame.ValueTypes;
 using SteuerSoft.Maps.Core.Material;
 
@@ -61,8 +62,11 @@ namespace SteuerSoft.Maps.Wpf
         {
             _map.ViewBounds = GraphicsDevice.Viewport.Bounds.ToMapRectangle();
 
-            _map.Update(gameTime, _mouse.GetState(), _keyboard.GetState());
-
+            SteuerSoft.Maps.Controls.MonoGame.Material.InputArgs args = new InputArgs();
+            args.MouseState = _mouse.GetState();
+            args.KeyboardState = _keyboard.GetState();
+            _map.Update(gameTime, args);
+            
             base.Update(gameTime);
         }
 

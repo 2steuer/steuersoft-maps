@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SteuerSoft.Maps.Controls.MonoGame;
 using SteuerSoft.Maps.Controls.MonoGame.ValueTypes;
+using SteuerSoft.Maps.Core.Interfaces;
 using SteuerSoft.Maps.Core.Material;
 using Color = System.Windows.Media.Color;
 
@@ -25,6 +26,15 @@ namespace SteuerSoft.Maps.Wpf
     /// </summary>
     public partial class Map : UserControl
     {
+        public static readonly DependencyProperty ProviderProperty = DependencyProperty.Register(
+            "Provider", typeof(IMapProvider), typeof(Map), new PropertyMetadata(default(IMapProvider), ProviderChanged));
+
+        public IMapProvider Provider
+        {
+            get { return (IMapProvider) GetValue(ProviderProperty); }
+            set { SetValue(ProviderProperty, value); }
+        }
+
         public static readonly DependencyProperty MapPositionProperty = DependencyProperty.Register(
             "MapPosition", typeof(MapPointLatLon), typeof(Map), new PropertyMetadata(default(MapPointLatLon), PositionChangedEvent));
 
@@ -163,6 +173,16 @@ namespace SteuerSoft.Maps.Wpf
             }
         }
 
+        private static void ProviderChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var m = (dependencyObject as Map).Scene.Map;
+            if (m != null)
+            {
+                m.Provider = (IMapProvider)dependencyPropertyChangedEventArgs.NewValue;
+            }
+        }
+
+
 
         private void Scene_OnInitialized(object sender)
         {
@@ -174,6 +194,7 @@ namespace SteuerSoft.Maps.Wpf
             map.DrawTileBorders = TileBorders;
             map.CanMove = CanMove;
             map.CanZoom = CanZoom;
+            map.Provider = Provider;
 
             map.OnZoomed += Map_OnZoomed;
             map.OnMoved += Map_OnMoved;
