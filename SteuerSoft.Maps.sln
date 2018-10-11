@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lage", "Lage", "{49EB54C3-6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Lage", "SteuerSoft.Lage\SteuerSoft.Lage.csproj", "{61558CB0-8B74-41CF-9D5C-87F9E015A28D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.KoordinatenSammeln", "SteuerSoft.KoordinatenSammeln\SteuerSoft.KoordinatenSammeln.csproj", "{3ECB1915-4CFE-41F2-B381-260C89D7B22C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,12 +98,21 @@ Global
 		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Release|x86.ActiveCfg = Release|Any CPU
 		{61558CB0-8B74-41CF-9D5C-87F9E015A28D}.Release|x86.Build.0 = Release|Any CPU
+		{3ECB1915-4CFE-41F2-B381-260C89D7B22C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ECB1915-4CFE-41F2-B381-260C89D7B22C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ECB1915-4CFE-41F2-B381-260C89D7B22C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3ECB1915-4CFE-41F2-B381-260C89D7B22C}.Debug|x86.Build.0 = Debug|Any CPU
+		{3ECB1915-4CFE-41F2-B381-260C89D7B22C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ECB1915-4CFE-41F2-B381-260C89D7B22C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ECB1915-4CFE-41F2-B381-260C89D7B22C}.Release|x86.ActiveCfg = Release|Any CPU
+		{3ECB1915-4CFE-41F2-B381-260C89D7B22C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{61558CB0-8B74-41CF-9D5C-87F9E015A28D} = {49EB54C3-655D-49BB-8F73-7CCAB858E2B2}
+		{3ECB1915-4CFE-41F2-B381-260C89D7B22C} = {49EB54C3-655D-49BB-8F73-7CCAB858E2B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51DECF4D-49DB-47F5-A358-E4D70EC0EDA3}
