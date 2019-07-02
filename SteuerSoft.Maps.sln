@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{1D22E1B4-B041-4693-A2EC-95B78B4C67AD}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps", "SteuerSoft.Maps\SteuerSoft.Maps.csproj", "{DB332FD5-A677-48B4-AEDF-2FE6885B6858}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteuerSoft.Maps.Core", "SteuerSoft.Maps.Core\SteuerSoft.Maps.Core.csproj", "{55C7D11C-AA42-4CC1-8355-4E4AB3F884BF}"

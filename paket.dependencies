@@ -1,0 +1,24 @@
+source K:\NuGetRepository
+source https://api.nuget.org/v3/index.json
+
+nuget CsvHelper 7.1.1 prerelease restriction: >= net461
+nuget Extended.Wpf.Toolkit 3.3.0 prerelease restriction: >= net461
+nuget Fody 3.2.9 prerelease
+nuget MonoGame.Extended 1.1.0 prerelease
+nuget MonoGame.Extended.Graphics 1.1.0 prerelease restriction: >= net46
+nuget MonoGame.Framework.DesktopGL 3.6.0.1625 prerelease
+nuget MonoGame.Framework.WindowsDX 3.7.0.1708 prerelease restriction: >= net461
+nuget MonoGame.Framework.WpfInterop 1.7.0 prerelease restriction: >= net461
+nuget Newtonsoft.Json 11.0.2 prerelease
+nuget OptimizedPriorityQueue 4.1.1 prerelease restriction: >= net452
+nuget PropertyChanged.Fody 2.5.13 prerelease
+nuget SharpDX 4.0.1 prerelease restriction: >= net461
+nuget SharpDX.Direct2D1 4.0.1 prerelease restriction: >= net461
+nuget SharpDX.Direct3D11 4.0.1 prerelease restriction: >= net461
+nuget SharpDX.Direct3D9 4.0.1 prerelease restriction: >= net461
+nuget SharpDX.DXGI 4.0.1 prerelease restriction: >= net461
+nuget SharpDX.Mathematics 4.0.1 prerelease restriction: >= net461
+nuget SharpDX.MediaFoundation 4.0.1 prerelease restriction: >= net461
+nuget SharpDX.XAudio2 4.0.1 prerelease restriction: >= net461
+nuget SharpDX.XInput 4.0.1 prerelease restriction: >= net461
+nuget SharpGIS.NmeaParser 1.10.0 prerelease restriction: >= net461
